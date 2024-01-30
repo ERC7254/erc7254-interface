@@ -1,4 +1,5 @@
 import { ComponentStyleConfig, extendTheme } from "@chakra-ui/react";
+
 import { commonBadge } from "../commons";
 
 const config = {

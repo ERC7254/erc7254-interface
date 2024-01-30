@@ -1,9 +1,10 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { BlastThemeProvider } from "@/contexts/ChakraProvider";
+
 import { chakraPetch } from "@/constants/fonts";
-import { cookies } from "next/headers";
+import { BlastThemeProvider } from "@/contexts/ChakraProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>): React.ReactElement {
   return (
     <html lang="en">
       <body className={`${inter.className} ${chakraPetch.className}`}>

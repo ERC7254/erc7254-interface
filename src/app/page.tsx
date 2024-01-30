@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@chakra-ui/react";
+
 import { THEME, useTheme } from "@/contexts/ChakraProvider";
 import HomePage from "@/pages/Home";
-import { Button, useColorMode } from "@chakra-ui/react";
 
-export default function Home() {
-  // const { colorMode, toggleColorMode } = useColorMode();
+export default function Home(): React.ReactElement {
   const { theme, setTheme } = useTheme();
 
   return (

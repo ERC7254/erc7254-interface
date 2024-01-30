@@ -1,16 +1,15 @@
 "use client";
 
-import type { Dict } from "@chakra-ui/utils";
 import {
   ChakraProvider,
   cookieStorageManagerSSR,
   localStorageManager,
-  useColorMode,
 } from "@chakra-ui/react";
+import type { Dict } from "@chakra-ui/utils";
+import { createContext, useContext, useState } from "react";
 
 import themeDark from "@/themes/dark";
 import themeLight from "@/themes/light";
-import { createContext, useContext, useState } from "react";
 
 interface IProps {
   children: React.ReactNode;
@@ -71,7 +70,7 @@ const BlastThemeProvider = ({
   cookies,
 }: IProps): React.ReactElement => {
   const [theme, setThemeState] = useState<THEME>(
-    getThemeValue(parseCookie(cookies ?? "", "blastTheme"))
+    getThemeValue(parseCookie(cookies ?? "", "blastTheme")),
   );
   const setTheme = (value: THEME): void => {
     const val = getThemeValue(value);

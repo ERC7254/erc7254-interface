@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { BlastThemeProvider } from "@/contexts/ChakraProvider";
+import { chakraPetch } from "@/constants/fonts";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} ${chakraPetch.className}`}>
+        <BlastThemeProvider cookies={"blasttheme"}>
+          {children}
+        </BlastThemeProvider>
+      </body>
     </html>
   );
 }

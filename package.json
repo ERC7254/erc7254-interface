@@ -5,8 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start -p 3340",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix --ignore-path .eslintignore",
+    "lint:css": "prettier '**/*.{json,yaml,css,scss}' --write --ignore-path .eslintignore",
+    "format": "yarn lint:fix && yarn lint:css",
+    "prepare": "husky install .husky",
+    "deploy": "npm run build && pm2 start npm --name blast_ecosystem -- start",
+    "reDeploy": "npm run build && pm2 restart blast_ecosystem"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",

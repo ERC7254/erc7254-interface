@@ -19,11 +19,14 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "cookies-next": "^4.1.1",
     "framer-motion": "^11.0.3",
     "next": "14.1.0",
     "prettier": "^3.2.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-inlinesvg": "^4.1.1",
+    "sass": "^1.70.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.9",

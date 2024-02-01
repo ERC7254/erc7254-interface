@@ -1,4 +1,4 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -16,18 +16,16 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.container {
+  padding-left: rem(24px) !important;
+  padding-right: rem(24px) !important;
+
+  @include min-tablet {
+    padding-left: rem(40px) !important;
+    padding-right: rem(40px) !important;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
+strong {
+  font-weight: 500 !important;
+}

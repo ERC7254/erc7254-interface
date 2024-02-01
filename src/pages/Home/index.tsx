@@ -1,10 +1,7 @@
-import { Badge } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+
+import s from "./style.module.scss";
 
 export default function HomePage(): React.ReactElement {
-  return (
-    <div>
-      <p>Home page</p>
-      <Badge>I am a custom badge</Badge>
-    </div>
-  );
+  return <Box className={`${s.container} container mx-auto`}></Box>;
 }

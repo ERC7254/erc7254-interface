@@ -1,11 +1,14 @@
 "use client";
 
+import { CacheProvider } from "@chakra-ui/next-js";
 import {
   ChakraProvider,
+  ColorModeScript,
   cookieStorageManagerSSR,
   localStorageManager,
 } from "@chakra-ui/react";
 import type { Dict } from "@chakra-ui/utils";
+import { getCookie } from "cookies-next";
 import { createContext, useContext, useState } from "react";
 
 import themeDark from "@/themes/dark";
@@ -16,16 +19,10 @@ interface IProps {
   cookies: string;
 }
 
-interface Layouts {
-  light: JSX.Element;
-  dark: JSX.Element;
-}
-
 interface IUseTheme {
   theme: string;
   setTheme: (value: THEME) => void;
   getCurrentTheme: Dict | undefined | void;
-  getCurrentLayout: ({ dark, light }: Partial<Layouts>) => JSX.Element;
 }
 
 export enum THEME {
@@ -39,22 +36,20 @@ interface IThemes {
   theme: string;
   setTheme: (value: THEME) => void;
   getCurrentTheme: () => Dict | undefined | void;
-  getCurrentLayout: ({ dark, light }: Partial<Layouts>) => JSX.Element;
 }
 
 const ThemeContext = createContext<IThemes>({
-  theme: defaultTheme,
+  theme: (getCookie("blastTheme") as THEME) || defaultTheme,
   setTheme: () => {
     return;
   },
-  getCurrentLayout() {
-    return <></>; // eslint-disable-line react/jsx-no-useless-fragment
-  },
+
   getCurrentTheme() {},
 });
 
 export function parseCookie(cookie: string, key: string): string {
   const match = cookie.match(new RegExp(`(^| )${key}=([^;]+)`));
+
   return match?.[2] as string;
 }
 const getThemeValue = (t: string): THEME => {
@@ -62,7 +57,7 @@ const getThemeValue = (t: string): THEME => {
   if (Object.values(THEME).includes(initTheme as THEME)) {
     return initTheme as THEME;
   }
-  return defaultTheme;
+  return (getCookie("blastTheme") as THEME) || defaultTheme;
 };
 
 const BlastThemeProvider = ({
@@ -72,6 +67,7 @@ const BlastThemeProvider = ({
   const [theme, setThemeState] = useState<THEME>(
     getThemeValue(parseCookie(cookies ?? "", "blastTheme")),
   );
+
   const setTheme = (value: THEME): void => {
     const val = getThemeValue(value);
     setThemeState(val);
@@ -84,29 +80,26 @@ const BlastThemeProvider = ({
     return undefined;
   };
 
-  const getCurrentLayout = ({ dark, light }: Partial<Layouts>): JSX.Element => {
-    if (dark && theme === THEME.Dark) return dark;
-    else if (light && theme === THEME.Light) return light;
-
-    return <></>; // eslint-disable-line react/jsx-no-useless-fragment
-  };
-
   const colorModeManager =
     typeof cookies === "string"
       ? cookieStorageManagerSSR(cookies)
       : localStorageManager;
 
   return (
-    <ThemeContext.Provider
-      value={{ setTheme, theme, getCurrentLayout, getCurrentTheme }}
-    >
-      <ChakraProvider
-        colorModeManager={colorModeManager}
-        theme={getCurrentTheme()}
-      >
-        {children}
-      </ChakraProvider>
-    </ThemeContext.Provider>
+    <CacheProvider>
+      <ThemeContext.Provider value={{ setTheme, theme, getCurrentTheme }}>
+        <ChakraProvider
+          colorModeManager={colorModeManager}
+          theme={getCurrentTheme()}
+        >
+          <ColorModeScript
+            initialColorMode={getCurrentTheme()!.config.initialColorMode}
+            type="cookie"
+          />
+          {children}
+        </ChakraProvider>
+      </ThemeContext.Provider>
+    </CacheProvider>
   );
 };
 
@@ -114,7 +107,6 @@ const useTheme = (): IUseTheme => {
   const {
     theme: contextTheme,
     setTheme,
-    getCurrentLayout,
     getCurrentTheme,
   } = useContext(ThemeContext);
   const theme = process.env.ONLY_THEME || contextTheme;
@@ -124,7 +116,6 @@ const useTheme = (): IUseTheme => {
     theme,
     setTheme,
     getCurrentTheme: getCurrentTheme(),
-    getCurrentLayout,
   };
 };
 

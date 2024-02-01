@@ -1,4 +1,4 @@
-@use 'sass:math' as math;
+@use "sass:math" as math;
 
 @function rem($px, $base: 10px) {
   @if unitless($px) {
@@ -65,32 +65,32 @@
 }
 
 @mixin min-tablet {
-  @media (min-width: theme('screens.sm')) {
+  @media (min-width: theme("screens.sm")) {
     @content;
   }
 }
 
 @mixin min-tabletWide {
-  @media (min-width: theme('screens.md')) {
+  @media (min-width: theme("screens.md")) {
     @content;
   }
 }
 
 @mixin pcSmall {
-  @media (min-width: theme('screens.lg')) {
+  @media (min-width: theme("screens.lg")) {
     @content;
   }
 }
 
 @mixin pcMid {
-  @media (min-width: theme('screens.xl')) {
+  @media (min-width: theme("screens.xl")) {
     @content;
   }
 }
 
 @mixin fixLayoutShift($width, $height) {
   &:before {
-    content: '';
+    content: "";
     width: 1px;
     margin-left: -1px;
     float: left;
@@ -99,7 +99,7 @@
   }
 
   &:after {
-    content: '';
+    content: "";
     display: block;
     clear: both;
   }
@@ -228,20 +228,20 @@
 }
 
 @mixin make-typography($sizes: $h1) {
-  @if map-has-key($sizes, 'fs') {
-    font-size: rem(map-get($sizes, 'fs'));
+  @if map-has-key($sizes, "fs") {
+    font-size: rem(map-get($sizes, "fs"));
   }
 
-  @if map-has-key($sizes, 'lh') {
-    line-height: rem(map-get($sizes, 'lh'));
+  @if map-has-key($sizes, "lh") {
+    line-height: rem(map-get($sizes, "lh"));
   }
 
-  @if map-has-key($sizes, 'fw') {
-    font-weight: map-get($sizes, 'fw');
+  @if map-has-key($sizes, "fw") {
+    font-weight: map-get($sizes, "fw");
   }
 
-  @if map-has-key($sizes, 'ls') {
-    letter-spacing: rem(map-get($sizes, 'ls'));
+  @if map-has-key($sizes, "ls") {
+    letter-spacing: rem(map-get($sizes, "ls"));
   }
 }
 

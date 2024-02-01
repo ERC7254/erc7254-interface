@@ -19,7 +19,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>): React.ReactElement {
-
   return (
     <html lang="en">
       <body className={`${inter.className} ${chakraPetch.className}`}>

@@ -3,8 +3,9 @@ import "../styles/app.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import DebugGrid from "@/components/DebugGrid";
 import { chakraPetch } from "@/constants/fonts";
-import { BlastThemeProvider } from "@/contexts/ChakraProvider";
+import { BlastThemeProvider } from "@/contexts/BlastThemeProvider";
 import Header from "@/layouts/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,8 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} ${chakraPetch.className}`}>
-        <Header />
         <BlastThemeProvider cookies={"blasttheme"}>
+          <DebugGrid />
+          <Header />
           {children}
         </BlastThemeProvider>
       </body>

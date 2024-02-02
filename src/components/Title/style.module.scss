@@ -1,0 +1,15 @@
+.title {
+  font-weight: bold;
+
+  &__lg {
+    font-size: 64px;
+  }
+
+  &__md {
+    font-size: 48px;
+  }
+
+  &__sm {
+    font-size: 24px;
+  }
+}

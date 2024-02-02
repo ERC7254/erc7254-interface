@@ -1,2 +1,14 @@
 .header {
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--black);
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  &_connectWalletBtn {
+    column-gap: 8px;
+  }
 }

@@ -7,6 +7,6 @@ export const commonBadge: ComponentStyleConfig = {
     letterSpacing: "0.02em",
     padding: "4px",
     borderRadius: "2px",
-    fontSize: "12px",
+    fontSize: "22px",
   },
 };

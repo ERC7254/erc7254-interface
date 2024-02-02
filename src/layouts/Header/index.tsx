@@ -8,15 +8,22 @@ export default function Header(): React.ReactElement {
   return (
     <header className={`${s.header}`}>
       <Container>
-        <HStack>
+        <HStack justifyContent="space-between">
           <HStack>
-            <Button>Mint</Button>
-            <Button>Tokens</Button>
+            <Button variant="ghost">Mint</Button>
+            <Button variant="ghost">Tokens</Button>
           </HStack>
-
-          <SvgInsert src="/branding/logo.svg" />
-
-          <Button size="sm">CONNECT WALLET</Button>
+          <Button bg="transparent" _hover={{ bg: "transparent" }}>
+            <SvgInsert src="/branding/logo.svg" />
+          </Button>
+          <Button
+            variant="solid"
+            size="sm"
+            className={s.header_connectWalletBtn}
+          >
+            <SvgInsert src="/icons/wallet.svg" />
+            CONNECT WALLET
+          </Button>
         </HStack>
       </Container>
     </header>

@@ -94,16 +94,15 @@ ul {
 
 html {
   box-sizing: border-box;
-  font-size: 10px !important;
-  background-color: var(--dark-grey, #090909);
+  font-size: 16px !important;
 
-  @include min-tablet {
-    font-size: vw(10px, 900px) !important;
-  }
+  // @include min-tablet {
+  //   font-size: vw(16px, 900px) !important;
+  // }
 
-  @include pcSmall {
-    font-size: vw(10px) !important;
-  }
+  // @include pcSmall {
+  //   font-size: 16px !important;
+  // }
 }
 
 *,
@@ -139,7 +138,7 @@ body {
   font-weight: normal;
   font-size: rem(16px);
   // background-color: var(--dark-grey);
-  transition: background-color 0.4s var(--easeInOutQuart);
+  // transition: background-color 0.4s var(--easeInOutQuart);
   overflow-x: hidden;
 
   &::before {

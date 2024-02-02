@@ -112,7 +112,7 @@ export default function Pagination({
                   {value}
                 </Button>
               );
-            })
+            }),
           )}
         </Flex>
 

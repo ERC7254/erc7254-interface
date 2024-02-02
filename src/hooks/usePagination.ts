@@ -15,7 +15,7 @@ const getStartToEnd = (start: number, end: number): number[] => {
     {
       length: end - start + 1,
     },
-    (_, index) => index + start
+    (_, index) => index + start,
   );
 };
 

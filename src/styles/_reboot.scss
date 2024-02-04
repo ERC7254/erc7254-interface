@@ -158,10 +158,10 @@ body {
 }
 
 .grid {
-  column-gap: rem(20px);
+  column-gap: 20px;
 
   @include min-tablet {
-    column-gap: rem(24px);
+    column-gap: 24px;
   }
 
   @include pcSmall {

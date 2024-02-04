@@ -98,10 +98,9 @@ export const Input: ComponentStyleConfig = {
         //   borderColor: "secondary.original.100",
         //   boxShadow: "secondary.original.100",
         // },
-        // _focusVisible: {
-        //   borderColor: "primary.purple.500",
-        //   boxShadow: "primary.purple.500",
-        // },
+        _focusVisible: {
+          borderColor: "brand.camo.300",
+        },
         _placeholder: {
           color: "brand.camo.200",
         },
@@ -123,6 +122,72 @@ export const Input: ComponentStyleConfig = {
   },
 };
 
+export const FormControl: ComponentStyleConfig = {
+  baseStyle: {
+    field: {
+      color: "paragraph.accent.100",
+    },
+  },
+  sizes: {
+    lg: {
+      field: {
+        height: "56px",
+      },
+    },
+  },
+  variants: {
+    filled: {
+      field: {
+        color: "paragraph.accent.300",
+        fontSize: "1rem",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "brand.camo.300",
+        borderRadius: "3xl",
+        background: "rgba(64, 72, 51, 0.5)",
+        // _invalid: {
+        //   borderColor: "secondary.original.100",
+        //   boxShadow: "secondary.original.100",
+        // },
+        _focusVisible: {
+          borderColor: "brand.camo.300",
+        },
+        _placeholder: {
+          color: "brand.camo.200",
+        },
+      },
+    },
+
+    group: {
+      field: {
+        color: "paragraph.accent.300",
+        fontSize: "1rem",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "brand.camo.300",
+        borderRadius: "3xl",
+        background: "rgba(64, 72, 51, 0.5)",
+        // _invalid: {
+        //   borderColor: "secondary.original.100",
+        //   boxShadow: "secondary.original.100",
+        // },
+        _focusVisible: {
+          borderColor: "brand.camo.300",
+        },
+        _placeholder: {
+          color: "brand.camo.200",
+        },
+      },
+    },
+  },
+};
+
+export const CreatableSelect: ComponentStyleConfig = {
+  baseStyle: {
+    background: "red",
+  },
+};
+
 const themeDark = extendTheme({
   colors,
   config,
@@ -132,6 +197,8 @@ const themeDark = extendTheme({
     Button,
     Card,
     Input,
+    FormControl,
+    CreatableSelect,
   },
 });
 

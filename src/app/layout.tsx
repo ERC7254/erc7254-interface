@@ -1,14 +1,13 @@
 import "../styles/app.scss";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import DebugGrid from "@/components/DebugGrid";
 import { chakraPetch } from "@/constants/fonts";
-import { BlastThemeProvider } from "@/contexts/BlastThemeProvider";
 import Header from "@/layouts/Header";
 
-const inter = Inter({ subsets: ["latin"] });
+import Providers from "./providers";
+import Template from "./template";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,12 +21,12 @@ export default function RootLayout({
 }>): React.ReactElement {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${chakraPetch.className}`}>
-        <BlastThemeProvider cookies={"blasttheme"}>
-          <DebugGrid />
+      <body className={` ${chakraPetch.className}`}>
+        <Providers>
           <Header />
-          {children}
-        </BlastThemeProvider>
+          <DebugGrid />
+          <Template>{children}</Template>
+        </Providers>
       </body>
     </html>
   );

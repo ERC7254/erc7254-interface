@@ -1,0 +1,39 @@
+.dot {
+  aspect-ratio: 1;
+  width: 8px;
+  height: auto;
+  background-color: var(--brand-yellow-200);
+  margin-right: 8px;
+
+  transition: all 0.5s ease-in-out;
+  -moz-animation: blink normal 1.5s infinite ease-in-out;
+  /* Firefox */
+  -webkit-animation: blink normal 1.5s infinite ease-in-out;
+  /* Webkit */
+  -ms-animation: blink normal 1.5s infinite ease-in-out;
+  /* IE */
+  animation: blink normal 1.5s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0% {
+    background-color: var(--brand-yellow-200);
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: var(--brand-yellow-200);
+  }
+}
+@-webkit-keyframes blink {
+  0% {
+    background-color: var(--brand-yellow-200);
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: var(--brand-yellow-200);
+  }
+}

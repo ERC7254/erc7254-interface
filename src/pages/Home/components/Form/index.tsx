@@ -18,6 +18,10 @@ import Title from "@/components/Title";
 import { NewToken } from "@/types/new-token";
 
 import s from "./style.module.scss";
+// import { useReadContract } from "wagmi";
+
+// import { abi } from "@/abis/IFactory";
+// import { config } from "@/wagmi/config";
 
 const defaultValues = {
   name: "",
@@ -49,10 +53,12 @@ export default function HomeForm(): React.ReactElement {
 
   const onSubmit = (data: NewToken): void => console.log(data);
   // const data = useReadContract({
+  //   chainId: 168587773,
   //   abi,
   //   address: "0x0709973e3f5be86d4648dc3302d1aea227322cd7",
-  //   functionName: "totalSupply",
+  //   functionName: "symbol",
   // });
+  // console.log(data);
 
   return (
     <Box className={s.form}>
@@ -71,10 +77,14 @@ export default function HomeForm(): React.ReactElement {
         </CardHeader>
         <CardBody>
           <FormProvider {...methods}>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} mb={6}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} className={s.form_grid}>
               <Input label="Name" isRequired {...register("name")} />
               <Input label="Symbol" isRequired {...register("symbol")} />
-              <Autocomplete label="Reward" {...register("tokenReward")} />
+              <Autocomplete
+                label="Token Reward"
+                isRequired
+                {...register("tokenReward")}
+              />
               <Input
                 type="number"
                 label="Total supply"
@@ -84,7 +94,9 @@ export default function HomeForm(): React.ReactElement {
             </SimpleGrid>
           </FormProvider>
 
-          <Button type="submit">CREATE</Button>
+          <Box className={s.submitBtn}>
+            <Button type="submit">CREATE</Button>
+          </Box>
         </CardBody>
       </Card>
     </Box>

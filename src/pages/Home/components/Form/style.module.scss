@@ -1,6 +1,25 @@
 .form {
   &_inner {
-    padding-left: 76px;
-    padding-right: 76px;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-bottom: 76px;
+
+    @include min-tablet {
+      padding-left: 76px;
+      padding-right: 76px;
+    }
   }
+
+  &_grid {
+    row-gap: 48px;
+    column-gap: 64px;
+    margin-bottom: 32px;
+  }
+}
+
+.submitBtn {
+  margin-bottom: 64px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }

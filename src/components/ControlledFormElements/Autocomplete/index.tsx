@@ -1,14 +1,14 @@
 "use client";
 
 import { Box, Stack, Text, useToken } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import CreatableSelect from "react-select/creatable";
+import Select, { ClearIndicatorProps } from "react-select";
 
-import { rewardTokenOptions } from "@/constants/rewardTokenList";
+import SvgInsert from "@/components/SvgInsert";
+import { IRewardToken, rewardTokenOptions } from "@/constants/rewardTokenList";
 
-import ErrorIndicator from "../ErrorIndicator";
-
+import ErrorIndicator from "../ErrorMessage";
 interface IAutocomplete {
   label: string;
   name: string;
@@ -35,12 +35,49 @@ export default function Autocomplete({
 
   useEffect(() => setIsMounted(true), []);
 
+  const components = {
+    ClearIndicator: (
+      props: ClearIndicatorProps<IRewardToken, false>,
+    ): React.ReactElement => {
+      const {
+        getStyles,
+        innerProps: { ref, ...restInnerProps },
+      } = props;
+      return (
+        <Box
+          p={2}
+          {...restInnerProps}
+          ref={ref}
+          style={getStyles("clearIndicator", props) as CSSProperties}
+        >
+          <SvgInsert src="/icons/cross.svg" fill={brandCamo200} />
+        </Box>
+      );
+    },
+    DropdownIndicator: () => (
+      <Box p={2}>
+        <SvgInsert src="/icons/chevron.svg" />
+      </Box>
+    ),
+  };
+
+  const filterOptions = (
+    candidate: { label: string; value: string; data: IRewardToken },
+    input: string,
+  ): boolean => {
+    const inputLowerCase = input.toLowerCase();
+    return (
+      candidate.data.name.toLowerCase().includes(inputLowerCase) ||
+      candidate.data.value.toLowerCase().includes(inputLowerCase)
+    );
+  };
+
   return isMounted ? (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { invalid, error } }) => (
-        <Stack rowGap={2}>
+        <Stack rowGap={2} position="relative">
           <Text fontSize="md">
             {label}
             {isRequired && (
@@ -49,8 +86,10 @@ export default function Autocomplete({
               </Box>
             )}
           </Text>
-          <CreatableSelect
+          <Select
             {...field}
+            components={components}
+            filterOption={filterOptions}
             value={rewardTokenOptions.find(
               (item) => item.value === field.value,
             )}
@@ -114,6 +153,7 @@ export default function Autocomplete({
               }),
               option: () => ({
                 transition: "all 0.15s ease-in-out",
+                cursor: "pointer",
                 padding: "12px",
                 ":hover": {
                   padding: "12px 24px",

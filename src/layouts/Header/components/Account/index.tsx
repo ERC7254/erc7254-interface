@@ -1,15 +1,30 @@
 "use client";
-import { Box, HStack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  HStack,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  useToken,
+  VStack,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 
+import SvgInsert from "@/components/SvgInsert";
 import { truncateAddress } from "@/utils/truncateAddress";
 
 import s from "./style.module.scss";
 
 export function Account(): React.ReactElement {
   const { address } = useAccount();
+  const { disconnect } = useDisconnect();
   const [truncatedAddress, setTruncatedAddress] = useState<string>("");
+  const [brandCamo300] = useToken("colors", ["brand.camo.300"]);
 
   useEffect(() => {
     if (!address) return;
@@ -17,9 +32,39 @@ export function Account(): React.ReactElement {
   }, [address]);
 
   return (
-    <HStack>
-      <Box className={s.dot} />
-      <Text fontSize="sm">{truncatedAddress}</Text>
-    </HStack>
+    <Popover trigger="hover" placement="bottom-end">
+      <PopoverTrigger>
+        <HStack className={s.address}>
+          <Box className={s.dot} />
+          <Text fontSize="sm">{truncatedAddress}</Text>
+        </HStack>
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverBody>
+          <VStack>
+            <Button
+              width="full"
+              justifyContent="space-between"
+              variant="ghost"
+              onClick={() => disconnect()}
+            >
+              Profile
+            </Button>
+            <Divider />
+            <Button
+              width="full"
+              justifyContent="space-between"
+              variant="ghost"
+              rightIcon={
+                <SvgInsert src="/icons/log-out.svg" fill={brandCamo300} />
+              }
+              onClick={() => disconnect()}
+            >
+              Disconnect
+            </Button>
+          </VStack>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
   );
 }

@@ -5,6 +5,6 @@ export const navList = [
   },
   {
     name: "Tokens",
-    link: "tokens",
+    link: "/tokens",
   },
 ];

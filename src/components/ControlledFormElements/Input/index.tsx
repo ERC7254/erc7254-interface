@@ -4,7 +4,7 @@ import { Box, Input as ChakraInput, Stack, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-import ErrorIndicator from "../ErrorIndicator";
+import ErrorIndicator from "../ErrorMessage";
 
 interface IInput {
   type?: "number";
@@ -39,7 +39,7 @@ export default function Input({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { invalid, error } }) => (
-        <Stack rowGap={2}>
+        <Stack rowGap={2} position="relative">
           <Text fontSize="md">
             {label}
             {isRequired && (

@@ -1,3 +1,16 @@
+.address {
+  padding: 4px 16px;
+  background-color: var(--brand-camo-400);
+  border: 1px solid var(--brand-camo-300);
+  border-radius: 5px;
+  cursor: default;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--brand-camo-300);
+  }
+}
+
 .dot {
   aspect-ratio: 1;
   width: 8px;

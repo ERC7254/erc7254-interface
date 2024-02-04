@@ -13,5 +13,14 @@
   }
 
   &_link {
+    color: var(--brand-camo-200);
+    transition: all 0.3s ease-in-out;
+    &.active {
+      color: var(--brand-yellow-200) !important;
+    }
+
+    &:hover {
+      color: var(--brand-camo-100);
+    }
   }
 }

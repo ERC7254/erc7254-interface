@@ -36,6 +36,10 @@ export const Button: ComponentStyleConfig = {
       color: "brand.camo.200",
       _hover: {
         color: "brand.yellow.100",
+        svg: {
+          transition: "all 0.3s ease-in-out",
+          fill: "brand.yellow.100",
+        },
       },
     },
   },
@@ -53,7 +57,7 @@ export const Card: ComponentStyleConfig = {
       borderStyle: "solid",
       borderColor: "brand.camo.300",
       bg: "rgba(17, 20, 13, 0.3)",
-      backdropBlur: "70px",
+      backdropFilter: "blur(70px)",
       borderRadius: "2xl",
     },
     header: {
@@ -122,69 +126,29 @@ export const Input: ComponentStyleConfig = {
   },
 };
 
-export const FormControl: ComponentStyleConfig = {
-  baseStyle: {
-    field: {
-      color: "paragraph.accent.100",
-    },
-  },
-  sizes: {
-    lg: {
-      field: {
-        height: "56px",
-      },
-    },
-  },
-  variants: {
-    filled: {
-      field: {
-        color: "paragraph.accent.300",
-        fontSize: "1rem",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderColor: "brand.camo.300",
-        borderRadius: "3xl",
-        background: "rgba(64, 72, 51, 0.5)",
-        // _invalid: {
-        //   borderColor: "secondary.original.100",
-        //   boxShadow: "secondary.original.100",
-        // },
-        _focusVisible: {
-          borderColor: "brand.camo.300",
-        },
-        _placeholder: {
-          color: "brand.camo.200",
-        },
-      },
-    },
+const Popover: ComponentStyleConfig = {
+  parts: [],
 
-    group: {
-      field: {
-        color: "paragraph.accent.300",
-        fontSize: "1rem",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        borderColor: "brand.camo.300",
-        borderRadius: "3xl",
-        background: "rgba(64, 72, 51, 0.5)",
-        // _invalid: {
-        //   borderColor: "secondary.original.100",
-        //   boxShadow: "secondary.original.100",
-        // },
-        _focusVisible: {
-          borderColor: "brand.camo.300",
-        },
-        _placeholder: {
-          color: "brand.camo.200",
-        },
-      },
-    },
-  },
-};
-
-export const CreatableSelect: ComponentStyleConfig = {
   baseStyle: {
-    background: "red",
+    dialog: {
+      bg: "brand.camo.400",
+      backdropFilter: "blur(70px)",
+    },
+    content: {
+      padding: {
+        base: 2,
+        lg: 4,
+      },
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: "brand.camo.300",
+      bg: "brand.camo.400",
+      backdropFilter: "blur(70px)",
+      borderRadius: "2xl",
+    },
+    body: {
+      p: 0,
+    },
   },
 };
 
@@ -197,8 +161,7 @@ const themeDark = extendTheme({
     Button,
     Card,
     Input,
-    FormControl,
-    CreatableSelect,
+    Popover,
   },
 });
 

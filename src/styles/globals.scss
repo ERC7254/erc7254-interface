@@ -17,8 +17,8 @@
 }
 
 .container {
-  padding-left: rem(24px) !important;
-  padding-right: rem(24px) !important;
+  padding-left: rem(12px) !important;
+  padding-right: rem(12px) !important;
 
   @include min-tablet {
     padding-left: rem(40px) !important;

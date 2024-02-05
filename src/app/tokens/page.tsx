@@ -1,4 +1,4 @@
-import TokensPage from "@/pages/Tokens";
+import TokensPage from "@Modules/Tokens";
 
 export default function Tokens(): React.ReactElement {
   return (

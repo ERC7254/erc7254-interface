@@ -1,13 +1,16 @@
 import "../styles/app.scss";
 
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
 
 import DebugGrid from "@/components/DebugGrid";
 import { chakraPetch } from "@/constants/fonts";
 import Header from "@/layouts/Header";
+import { config } from "@/wagmi/config";
 
 import Providers from "./providers";
-import Template from "./template";
+// import Template from "./template";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,13 +22,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>): React.ReactElement {
+  const initialState = cookieToInitialState(config, headers().get("cookie"))!;
   return (
     <html lang="en">
       <body className={` ${chakraPetch.className}`}>
-        <Providers>
+        <Providers initialState={initialState}>
           <Header />
           <DebugGrid />
-          <Template>{children}</Template>
+          {children}
         </Providers>
       </body>
     </html>

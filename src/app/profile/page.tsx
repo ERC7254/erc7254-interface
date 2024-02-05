@@ -1,4 +1,4 @@
-import ProfilePage from "@/pages/Profile";
+import ProfilePage from "@Modules/Profile";
 
 export default function Profile(): React.ReactElement {
   return (

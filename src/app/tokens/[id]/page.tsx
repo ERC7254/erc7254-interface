@@ -1,4 +1,4 @@
-import TokenDetailPage from "@/pages/TokenDetail";
+import TokenDetailPage from "@Modules/TokenDetail";
 
 interface ITokenDetail {
   params: { id: string };

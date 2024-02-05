@@ -1,3 +1,5 @@
+"use client";
+
 import { BlastThemeProvider } from "@/contexts/BlastThemeProvider";
 import QueryClientProviders from "@/contexts/QueryClientProvider";
 import WagmiProviders from "@/contexts/WagmiProvider";

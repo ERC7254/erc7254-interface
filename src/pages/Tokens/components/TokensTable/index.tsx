@@ -1,58 +1,46 @@
+/* eslint-disable */
 "use client";
-import {
-  Card,
-  CardFooter,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Button, Card, CardFooter, TableContainer } from "@chakra-ui/react";
+import { useMemo } from "react";
 
+import CustomTable from "@/components/CustomTable";
 import Pagination from "@/components/Pagination";
+import { tokenList } from "@/constants/tokenList";
 
 export default function TokensTable(): React.ReactElement {
+  const columns = useMemo(
+    (): any => [
+      {
+        Header: "Name",
+        accessor: "name",
+      },
+
+      {
+        Header: "Total Supply",
+        accessor: "totalSupply",
+      },
+      {
+        Header: "Reward",
+        accessor: "reward",
+      },
+      {
+        Header: "claim",
+        accessor: "claim",
+        Cell: (props: any) => {
+          const reward = props.row.original.reward;
+          return <Button isDisabled={reward <= 0}>Claim</Button>;
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <Card>
       <TableContainer>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
-            </Tr>
-          </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
-        </Table>
+        <CustomTable columns={columns} data={tokenList} />
       </TableContainer>
-      <CardFooter>
+      <CardFooter justifyContent="flex-end">
         <Pagination
           amount={20}
           onChange={(a) => {

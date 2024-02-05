@@ -17,11 +17,6 @@ export const Badge: ComponentStyleConfig = {
 };
 
 export const Button: ComponentStyleConfig = {
-  // baseStyle: {
-  //   sx: {
-  //     paddingInlineStart: "20px",
-  //   },
-  // },
   variants: {
     solid: {
       color: "black",
@@ -152,6 +147,27 @@ const Popover: ComponentStyleConfig = {
   },
 };
 
+const Modal: ComponentStyleConfig = {
+  parts: [],
+
+  baseStyle: {
+    dialogContainer: {
+      backdropFilter: "blur(8px)",
+    },
+    dialog: {
+      p: "6",
+      bg: "brand.camo.400",
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: "brand.camo.300",
+      borderRadius: "2xl",
+    },
+    body: {
+      margin: "auto",
+    },
+  },
+};
+
 const themeDark = extendTheme({
   colors,
   config,
@@ -162,6 +178,7 @@ const themeDark = extendTheme({
     Card,
     Input,
     Popover,
+    Modal,
   },
 });
 

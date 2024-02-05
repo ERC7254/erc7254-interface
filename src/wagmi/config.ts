@@ -4,6 +4,12 @@ import { injected, metaMask, safe, walletConnect } from "wagmi/connectors";
 
 const projectId = process.env.NEXT_PUBLIC_PID;
 
+declare module "wagmi" {
+  interface Register {
+    config: typeof config;
+  }
+}
+
 export const config = createConfig({
   chains: [mainnet, sepolia, blastSepolia],
   ssr: true,

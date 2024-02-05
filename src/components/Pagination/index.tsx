@@ -104,7 +104,7 @@ export default function Pagination({
                 <Button
                   disabled={disabled || value === "..."}
                   key={`pagination-${value}`}
-                  variant="numberPagination"
+                  variant="ghost"
                   onClick={() => onClickPage(value)}
                   bg={currentPage === value ? bgActive : undefined}
                   color={currentPage === value ? "white" : colorButton}
@@ -138,7 +138,9 @@ export default function Pagination({
         </Box>
       </HStack>
       <HStack w={{ base: "full", md: "auto" }} justifyContent={"center"} pl={4}>
-        <Text color="paragraph.accent.200">Go to</Text>
+        <Text color="brand.camo.200" fontSize="sm">
+          Go to
+        </Text>
         <Input
           disabled={disabled}
           maxWidth="64px"
@@ -147,7 +149,7 @@ export default function Pagination({
           borderRadius="lg"
           value={goToPage}
           /*   defaultValue="1" */
-          color="paragraph.accent.200"
+          color="brand.camo.100"
           onKeyDown={(e) => handleLoadPage(e)}
           onChange={(e) => handleChangeGoTo(e)}
         />

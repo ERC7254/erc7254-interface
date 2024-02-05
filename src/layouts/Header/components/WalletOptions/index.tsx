@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
+import { Button, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import * as React from "react";
 import { Connector, useConnect } from "wagmi";
 
@@ -14,7 +14,7 @@ export function WalletOptions({
   const { connectors, connect } = useConnect();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         {connectors.map((connector) => (
@@ -49,8 +49,8 @@ function WalletOption({
   }, [connector]);
 
   return (
-    <button disabled={!ready} onClick={onClick}>
+    <Button variant="ghost" size="lg" disabled={!ready} onClick={onClick}>
       {connector.name}
-    </button>
+    </Button>
   );
 }

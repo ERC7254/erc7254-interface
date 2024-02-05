@@ -1,48 +1,38 @@
 "use client";
 
-import { Button, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 import Container from "@Components/Container";
 import SvgInsert from "@Components/SvgInsert";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useAccount } from "wagmi";
 
 import { navList } from "@/constants/navList";
+import useWindowSize from "@/hooks/useWindowSize";
 
 import { Account } from "./components/Account";
 import ConnectWalletBtn from "./components/ConnectWalletBtn";
+import DesktopNav from "./components/DesktopNav";
+import MobileNav from "./components/MobileNav";
 import s from "./style.module.scss";
 
 export default function Header(): React.ReactElement {
   const { isConnected } = useAccount();
-  const pathname = usePathname();
+  const { isMobile } = useWindowSize();
 
   return (
-    <header className={`${s.header}`}>
+    <Box as="header" className={`${s.header}`}>
       <Container>
         <HStack justifyContent="space-between">
-          <HStack gap={6}>
-            {navList.map((navItem) => {
-              return (
-                <Link
-                  href={navItem.link}
-                  key={navItem.name}
-                  className={`${s.header_link} ${pathname === navItem.link ? s.active : ""}`}
-                >
-                  <Text fontSize="md" fontWeight="bold">
-                    {navItem.name}
-                  </Text>
-                </Link>
-              );
-            })}
-          </HStack>
+          {isMobile ? (
+            <MobileNav navList={navList} />
+          ) : (
+            <DesktopNav navList={navList} />
+          )}
           <Button bg="transparent" _hover={{ bg: "transparent" }}>
             <SvgInsert src="/branding/logo.svg" />
           </Button>
-
           {isConnected ? <Account /> : <ConnectWalletBtn />}
         </HStack>
       </Container>
-    </header>
+    </Box>
   );
 }

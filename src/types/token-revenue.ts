@@ -10,4 +10,7 @@ export type TokenRevenueClaimable = {
   symbol: string;
   reward: number;
   totalSupply: number;
+  tokenReward: string;
+  logo: string;
+  address: string;
 };

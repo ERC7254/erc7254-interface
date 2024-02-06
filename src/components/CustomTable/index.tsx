@@ -74,7 +74,9 @@ export default function CustomTable({
                   >
                     {header.isPlaceholder ? null : (
                       <Flex
+                        mb={2}
                         alignItems="center"
+                        gap={2}
                         {...{
                           className: header.column.getCanSort()
                             ? "cursor-pointer select-none"

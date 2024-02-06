@@ -31,44 +31,63 @@ export default function CustomPagination({
   return (
     <Flex gap={2} justifyContent="flex-end">
       <Button
+        size="sm"
         variant="ghost"
         className="border rounded p-1"
         onClick={() => table.setPageIndex(0)}
         disabled={!table.getCanPreviousPage()}
       >
-        {"<<"}
+        <Text fontSize="sm" fontWeight="bold">
+          {"<<"}
+        </Text>
       </Button>
       <Button
+        size="sm"
         variant="ghost"
         className="border rounded p-1"
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        {"<"}
+        <Text fontSize="sm" fontWeight="bold">
+          {"<"}
+        </Text>
       </Button>
       <Button
+        size="sm"
         variant="ghost"
         className="border rounded p-1"
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
-        {">"}
+        <Text fontSize="sm" fontWeight="bold">
+          {">"}
+        </Text>
       </Button>
       <Button
+        size="sm"
         variant="ghost"
         className="border rounded p-1"
         onClick={() => table.setPageIndex(table.getPageCount() - 1)}
         disabled={!table.getCanNextPage()}
       >
-        {">>"}
+        <Text fontSize="sm" fontWeight="bold">
+          {">>"}
+        </Text>
       </Button>
       <Box as="span" className="flex items-center gap-1">
-        <Text fontSize="sm">Page</Text>
-        <Text fontWeight="bold" fontSize="sm">
+        <Text fontSize="sm" color="brand.camo.200">
+          Page
+        </Text>
+        <Text fontWeight="bold" fontSize="sm" color="brand.camo.100">
           {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </Text>
       </Box>
-      <Text as="span" className="flex items-center gap-1" fontSize="sm">
+      <Text
+        as="span"
+        className="flex items-center gap-1"
+        fontSize="sm"
+        color="brand.camo.200"
+      >
         | Go to page:
         <Input
           height="36px"

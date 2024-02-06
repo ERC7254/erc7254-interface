@@ -38,7 +38,7 @@ export default function Autocomplete({
 
   const components = {
     ClearIndicator: (
-      props: ClearIndicatorProps<IRewardToken, false>
+      props: ClearIndicatorProps<IRewardToken, false>,
     ): React.ReactElement => {
       const {
         getStyles,
@@ -64,7 +64,7 @@ export default function Autocomplete({
 
   const filterOptions = (
     candidate: { label: string; value: string; data: IRewardToken },
-    input: string
+    input: string,
   ): boolean => {
     const inputLowerCase = input.toLowerCase();
     return (
@@ -75,7 +75,7 @@ export default function Autocomplete({
 
   const formatOptionLabel = (
     option: IRewardToken,
-    { context }: { context: string }
+    { context }: { context: string },
   ): React.ReactElement =>
     context === "value" ? (
       <Text>{option.label}</Text>
@@ -108,7 +108,7 @@ export default function Autocomplete({
             components={components}
             filterOption={filterOptions}
             value={rewardTokenOptions.find(
-              (item) => item.value === field.value
+              (item) => item.value === field.value,
             )}
             onChange={(item): void => field.onChange(item?.value)}
             id={id}

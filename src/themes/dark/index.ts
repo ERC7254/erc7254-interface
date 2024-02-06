@@ -202,6 +202,21 @@ const Select: ComponentStyleConfig = {
   },
 };
 
+const Table: ComponentStyleConfig = {
+  baseStyle: {},
+  variants: {
+    simple: {
+      th: {
+        color: "brand.yellow.200",
+        borderColor: "brand.camo.300",
+      },
+      td: {
+        borderColor: "brand.camo.300",
+      },
+    },
+  },
+};
+
 const themeDark = extendTheme({
   colors,
   config,
@@ -214,6 +229,7 @@ const themeDark = extendTheme({
     Popover,
     Modal,
     Select,
+    Table,
   },
 });
 

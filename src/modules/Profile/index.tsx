@@ -1,13 +1,18 @@
-import { Text } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 
 import Container from "@/components/Container";
 
+import OwnedTokensTable from "./components/OwnedTokensTable";
+import OwnedTokensTitle from "./components/OwnedTokensTitle";
 import s from "./style.module.scss";
 
-export default function ProfilePage(): React.ReactElement {
+export default function TokensPage(): React.ReactElement {
   return (
-    <Container className={s.profilePage}>
-      <Text fontSize="6xl">Profile</Text>
+    <Container className={s.tokensPage}>
+      <Stack spacing={6}>
+        <OwnedTokensTitle />
+        <OwnedTokensTable />
+      </Stack>
     </Container>
   );
 }

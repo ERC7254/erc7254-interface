@@ -1,0 +1,24 @@
+.title {
+  height: 100%;
+  border-radius: 20px;
+  padding: 20px;
+
+  &_inner {
+    margin-bottom: 24px;
+    .bigTitle {
+      font-size: 64px;
+      line-height: 64px;
+      font-weight: bolder;
+    }
+  }
+
+  &_desc {
+    text-align: end;
+    display: flex;
+    justify-content: flex-end;
+    .desc {
+      font-weight: bold;
+      max-width: 520px;
+    }
+  }
+}

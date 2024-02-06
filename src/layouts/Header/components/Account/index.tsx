@@ -11,7 +11,7 @@ import {
   useToken,
   VStack,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 
@@ -25,7 +25,6 @@ export function Account(): React.ReactElement {
   const { disconnect } = useDisconnect();
   const [truncatedAddress, setTruncatedAddress] = useState<string>("");
   const [brandCamo300] = useToken("colors", ["brand.camo.300"]);
-  const router = useRouter();
 
   useEffect(() => {
     if (!address) return;
@@ -43,16 +42,16 @@ export function Account(): React.ReactElement {
       <PopoverContent>
         <PopoverBody>
           <VStack>
-            <Button
-              width="full"
-              justifyContent="space-between"
-              variant="ghost"
-              onClick={() => {
-                router.push("profile");
-              }}
-            >
-              Profile
-            </Button>
+            <Box>
+              <Button
+                width="full"
+                justifyContent="space-between"
+                variant="ghost"
+              >
+                <Link href="/profile">Profile</Link>
+              </Button>
+            </Box>
+
             <Button
               width="full"
               justifyContent="space-between"

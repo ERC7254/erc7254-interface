@@ -17,7 +17,7 @@ export default function TokenDetailHistory(): React.ReactElement {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
           const txHash = original.txHash;
@@ -47,7 +47,7 @@ export default function TokenDetailHistory(): React.ReactElement {
         header: "To",
         accessorKey: "to",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const to = props.row.original.to;
           return (
@@ -61,7 +61,7 @@ export default function TokenDetailHistory(): React.ReactElement {
         size: 10,
       },
     ],
-    []
+    [],
   );
 
   return (

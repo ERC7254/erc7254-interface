@@ -1,12 +1,13 @@
 "use client";
 
-import { Box, Stack, Text, useToken } from "@chakra-ui/react";
+import { Box, Flex, Stack, Text, useToken } from "@chakra-ui/react";
 import { CSSProperties, useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Select, { ClearIndicatorProps } from "react-select";
 
 import SvgInsert from "@/components/SvgInsert";
 import { IRewardToken, rewardTokenOptions } from "@/constants/rewardTokenList";
+import { truncateAddress } from "@/utils/truncateAddress";
 
 import ErrorIndicator from "../ErrorMessage";
 interface IAutocomplete {
@@ -37,7 +38,7 @@ export default function Autocomplete({
 
   const components = {
     ClearIndicator: (
-      props: ClearIndicatorProps<IRewardToken, false>,
+      props: ClearIndicatorProps<IRewardToken, false>
     ): React.ReactElement => {
       const {
         getStyles,
@@ -63,14 +64,29 @@ export default function Autocomplete({
 
   const filterOptions = (
     candidate: { label: string; value: string; data: IRewardToken },
-    input: string,
+    input: string
   ): boolean => {
     const inputLowerCase = input.toLowerCase();
     return (
-      candidate.data.name.toLowerCase().includes(inputLowerCase) ||
+      candidate.data.label.toLowerCase().includes(inputLowerCase) ||
       candidate.data.value.toLowerCase().includes(inputLowerCase)
     );
   };
+
+  const formatOptionLabel = (
+    option: IRewardToken,
+    { context }: { context: string }
+  ): React.ReactElement =>
+    context === "value" ? (
+      <Text>{option.label}</Text>
+    ) : (
+      <Flex width={"100%"} gap={2}>
+        <Text fontSize="sm">{option.label}</Text>
+        <Text fontSize="sm" color="#ffffff90">
+          ({truncateAddress(option.value)})
+        </Text>
+      </Flex>
+    );
 
   return isMounted ? (
     <Controller
@@ -88,10 +104,11 @@ export default function Autocomplete({
           </Text>
           <Select
             {...field}
+            formatOptionLabel={formatOptionLabel}
             components={components}
             filterOption={filterOptions}
             value={rewardTokenOptions.find(
-              (item) => item.value === field.value,
+              (item) => item.value === field.value
             )}
             onChange={(item): void => field.onChange(item?.value)}
             id={id}
@@ -149,7 +166,6 @@ export default function Autocomplete({
               menuList: () => ({
                 display: "flex",
                 flexDirection: "column",
-                rowGap: "20px",
               }),
               option: () => ({
                 transition: "all 0.15s ease-in-out",

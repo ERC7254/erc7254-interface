@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 "use client";
 
 import {
@@ -10,19 +8,28 @@ import {
   CardFooter,
   CardHeader,
   SimpleGrid,
-  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  BaseError,
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import * as yup from "yup";
 
 import { factoryAbi } from "@/abis/IFactory";
 import Autocomplete from "@/components/ControlledFormElements/Autocomplete";
 import Input from "@/components/ControlledFormElements/Input";
 import Title from "@/components/Title";
+import { WalletOptions } from "@/layouts/Header/components/WalletOptions";
 import { TokenRevenue } from "@/types/token-revenue";
 
+import ErrorModal from "../ErrorModal";
+import SuccessModal from "../SuccessModal";
 import s from "./style.module.scss";
 
 const defaultValues = {
@@ -51,29 +58,43 @@ export default function HomeForm(): React.ReactElement {
     defaultValues,
     mode: "onBlur",
   });
+  const { isConnected } = useAccount();
   const { handleSubmit, register } = methods;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const { data: hash, error, writeContract } = useWriteContract();
 
   const onSubmit = (data: TokenRevenue): void => {
-    writeContract({
-      chainId: 168587773,
-      address: "0x7f47E53D7eEeB1eC1C5b9ec10db6F172d9e1Dbdd",
-      abi: factoryAbi,
-      functionName: "create",
-      args: [
-        data.name,
-        data.symbol,
-        data.tokenReward,
-        data.totalSupply * 10 ** 18,
-      ],
-    });
+    isConnected
+      ? writeContract({
+          chainId: 168587773,
+          address: "0x7f47E53D7eEeB1eC1C5b9ec10db6F172d9e1Dbdd",
+          abi: factoryAbi,
+          functionName: "create",
+          args: [
+            data.name,
+            data.symbol,
+            data.tokenReward,
+            data.totalSupply * 10 ** 18,
+          ],
+        })
+      : onOpen();
   };
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
       hash,
     });
+
+  useEffect(() => {
+    setIsSuccessModalOpen(isConfirmed);
+  }, [isConfirmed]);
+
+  useEffect(() => {
+    setIsErrorModalOpen(Boolean(error));
+  }, [error]);
 
   // const data = useReadContract({
   //   chainId: 168587773,
@@ -118,16 +139,25 @@ export default function HomeForm(): React.ReactElement {
           </FormProvider>
 
           <Box className={s.submitBtn}>
-            <Button type="submit">CREATE</Button>
+            <Button type="submit" isLoading={isConfirming}>
+              {isConnected ? "CREATE" : "CONNECT WALLET TO CREATE"}
+            </Button>
           </Box>
         </CardBody>
         <CardFooter>
-          {hash && <Text>Transaction Hash: {hash}</Text>}
-          {isConfirming && <Text>Waiting for confirmation...</Text>}
-          {isConfirmed && <Text>Transaction confirmed.</Text>}
-          {error && <Text>Error: {error.message}</Text>}
+          <SuccessModal
+            hash={hash}
+            isOpen={isSuccessModalOpen}
+            onClose={setIsSuccessModalOpen}
+          />
+          <ErrorModal
+            error={error as BaseError}
+            isOpen={isErrorModalOpen}
+            onClose={setIsErrorModalOpen}
+          />
         </CardFooter>
       </Card>
+      <WalletOptions isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 }

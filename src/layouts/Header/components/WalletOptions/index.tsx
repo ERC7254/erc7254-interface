@@ -2,6 +2,10 @@ import { Button, Modal, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import * as React from "react";
 import { Connector, useConnect } from "wagmi";
 
+import SvgInsert from "@/components/SvgInsert";
+
+import s from "./style.module.scss";
+
 interface IWalletOptions {
   isOpen: boolean;
   onClose: () => void;
@@ -49,7 +53,19 @@ function WalletOption({
   }, [connector]);
 
   return (
-    <Button variant="ghost" size="lg" disabled={!ready} onClick={onClick}>
+    <Button
+      variant="ghost"
+      justifyContent="flex-start"
+      gap={6}
+      py={8}
+      size="lg"
+      disabled={!ready}
+      onClick={onClick}
+    >
+      <SvgInsert
+        src={`/branding/${connector.name.toLowerCase()}-icon.svg`}
+        className={s.walletIcon}
+      />
       {connector.name}
     </Button>
   );

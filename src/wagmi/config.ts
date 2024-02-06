@@ -6,7 +6,7 @@ const projectId = process.env.NEXT_PUBLIC_PID;
 
 export const config = createConfig({
   chains: [mainnet, sepolia, blastSepolia],
-  // ssr: true,
+  ssr: true,
   storage: createStorage({
     storage: cookieStorage,
   }),

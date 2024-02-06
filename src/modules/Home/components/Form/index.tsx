@@ -21,7 +21,7 @@ import { factoryAbi } from "@/abis/IFactory";
 import Autocomplete from "@/components/ControlledFormElements/Autocomplete";
 import Input from "@/components/ControlledFormElements/Input";
 import Title from "@/components/Title";
-import { NewToken } from "@/types/new-token";
+import { TokenRevenue } from "@/types/token-revenue";
 
 import s from "./style.module.scss";
 
@@ -55,7 +55,7 @@ export default function HomeForm(): React.ReactElement {
 
   const { data: hash, error, writeContract } = useWriteContract();
 
-  const onSubmit = (data: NewToken): void => {
+  const onSubmit = (data: TokenRevenue): void => {
     writeContract({
       chainId: 168587773,
       address: "0x7f47E53D7eEeB1eC1C5b9ec10db6F172d9e1Dbdd",

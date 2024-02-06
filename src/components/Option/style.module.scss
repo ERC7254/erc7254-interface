@@ -1,0 +1,14 @@
+.option {
+  transition: all 0.3s ease-in-out !important;
+  font-size: 16px !important;
+  background-color: var(--brand-camo-400) !important;
+  &:hover {
+    box-shadow: 0 0 10px 100px #1882a8 inset !important;
+    background: var(--brand-camo-300) !important;
+    color: var(--white) !important;
+  }
+  &:active {
+    background-color: var(--brand-yellow-200) !important;
+    color: var(--black) !important;
+  }
+}

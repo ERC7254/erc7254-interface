@@ -168,6 +168,40 @@ const Modal: ComponentStyleConfig = {
   },
 };
 
+const Select: ComponentStyleConfig = {
+  baseStyle: {
+    field: {
+      color: "paragraph.accent.100",
+    },
+  },
+  sizes: {
+    lg: {
+      field: {
+        height: "56px",
+      },
+    },
+  },
+  variants: {
+    filled: {
+      field: {
+        color: "paragraph.accent.300",
+        fontSize: "1rem",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        borderColor: "brand.camo.300",
+        borderRadius: "3xl",
+        background: "rgba(64, 72, 51, 0.5)",
+        _focusVisible: {
+          borderColor: "brand.camo.300",
+        },
+        _placeholder: {
+          color: "brand.camo.200",
+        },
+      },
+    },
+  },
+};
+
 const themeDark = extendTheme({
   colors,
   config,
@@ -179,6 +213,7 @@ const themeDark = extendTheme({
     Input,
     Popover,
     Modal,
+    Select,
   },
 });
 

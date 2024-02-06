@@ -84,7 +84,7 @@ export default function CustomTable({
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                         {{
                           asc: <SvgInsert src="/icons/chevron.svg" />,
@@ -118,7 +118,7 @@ export default function CustomTable({
                     <Td key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </Td>
                   );

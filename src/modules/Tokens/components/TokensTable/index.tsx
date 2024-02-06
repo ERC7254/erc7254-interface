@@ -32,7 +32,7 @@ export default function TokensTable(): React.ReactElement {
         header: "claim",
         accessorKey: "claim",
         cell: (
-          props: CellContext<TokenRevenueClaimable, unknown>
+          props: CellContext<TokenRevenueClaimable, unknown>,
         ): React.ReactElement => {
           const reward = props.row.original.reward;
           return (
@@ -44,7 +44,7 @@ export default function TokensTable(): React.ReactElement {
         size: 10,
       },
     ],
-    []
+    [],
   );
 
   return (

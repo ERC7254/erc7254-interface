@@ -1,6 +1,7 @@
 import "../styles/app.scss";
 
 import type { Metadata } from "next";
+import Head from "next/head";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 
@@ -10,7 +11,6 @@ import Header from "@/layouts/Header";
 import { config } from "@/wagmi/config";
 
 import Providers from "./providers";
-import Head from "next/head";
 import Template from "./template";
 
 export const metadata: Metadata = {

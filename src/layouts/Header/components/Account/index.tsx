@@ -11,11 +11,11 @@ import {
   useToken,
   VStack,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 
 import SvgInsert from "@/components/SvgInsert";
+import { Link } from "@/libs/router-events";
 import { truncateAddress } from "@/utils/truncateAddress";
 
 import s from "./style.module.scss";

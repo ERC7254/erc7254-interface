@@ -8,6 +8,7 @@ import { cookieToInitialState } from "wagmi";
 import DebugGrid from "@/components/DebugGrid";
 import { chakraPetch } from "@/constants/fonts";
 import Header from "@/layouts/Header";
+import { HandleOnComplete } from "@/libs/router-events";
 import { config } from "@/wagmi/config";
 
 import Providers from "./providers";
@@ -48,6 +49,7 @@ export default function RootLayout({
           <DebugGrid />
           <Template>{children}</Template>
         </Providers>
+        <HandleOnComplete />
       </body>
     </html>
   );

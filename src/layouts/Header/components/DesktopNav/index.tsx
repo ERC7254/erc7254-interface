@@ -1,8 +1,8 @@
 import { HStack, Text } from "@chakra-ui/react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { INavItem } from "@/constants/navList";
+import { Link } from "@/libs/router-events";
 
 import s from "../../style.module.scss";
 

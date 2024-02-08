@@ -1,43 +1,41 @@
-import SvgInsert from "@/components/SvgInsert";
-
 export interface INavItem {
   name: string;
   link: string;
-  logo?: React.ReactElement;
+  logo: string;
 }
 
 export const navList: INavItem[] = [
   {
     name: "Create",
     link: "/",
-    logo: <SvgInsert src="/icons/" />,
+    logo: "/icons/plus.svg",
   },
   {
     name: "Tokens",
     link: "/tokens",
-    logo: <SvgInsert src="/icons/" />,
+    logo: "/icons/list.svg",
   },
 ];
 
-export const mobileNavList: INavItem[] = [
-  {
-    name: "Home",
-    link: "/",
-    logo: <SvgInsert src="/icons/" />,
-  },
-  {
-    name: "Create",
-    link: "/",
-    logo: <SvgInsert src="/icons/" />,
-  },
-  {
-    name: "Tokens",
-    link: "/tokens",
-    logo: <SvgInsert src="/icons/" />,
-  },
-  {
-    name: "Profile",
-    link: "/profile",
-    logo: <SvgInsert src="/icons/" />,
-  },
-];
+// export const mobileNavList: INavItem[] = [
+//   // {
+//   //   name: "Home",
+//   //   link: "/",
+//   //   logo: "/icons/home.svg",
+//   // },
+//   {
+//     name: "Create",
+//     link: "/",
+//     logo: "/icons/plus.svg",
+//   },
+//   {
+//     name: "Tokens",
+//     link: "/tokens",
+//     logo: "/icons/list.svg",
+//   },
+//   {
+//     name: "Profile",
+//     link: "/profile",
+//     logo: "/icons/user.svg",
+//   },
+// ];

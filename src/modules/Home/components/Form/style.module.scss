@@ -18,8 +18,10 @@
 }
 
 .submitBtn {
-  margin-bottom: 64px;
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  @include min-tablet {
+    margin-bottom: 64px;
+  }
 }

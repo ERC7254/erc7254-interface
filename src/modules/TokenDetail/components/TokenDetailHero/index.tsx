@@ -29,7 +29,7 @@ export default function TokenDetailHero({
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress as `0x${string}`,
+    tokenAddress as `0x${string}`
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
@@ -48,8 +48,18 @@ export default function TokenDetailHero({
   };
 
   return (
-    <Flex justifyContent="space-between" alignItems="flex-end" mb="64px">
-      <Flex gap={4} alignItems="flex-start">
+    <Stack
+      direction={{ base: "column", md: "row" }}
+      justifyContent="space-between"
+      alignItems={{ base: "flex-start", md: "flex-end" }}
+      mb="64px"
+    >
+      <Stack
+        direction={{ base: "column", md: "row" }}
+        gap={4}
+        alignItems="flex-start"
+        mb={{ base: 6, md: "unset" }}
+      >
         <Box
           position="relative"
           aspectRatio={1}
@@ -63,7 +73,7 @@ export default function TokenDetailHero({
             fill
           />
         </Box>
-        <Stack>
+        <Stack direction={{ base: "row", md: "column" }} alignItems="flex-end">
           {/* <Flex gap={4} alignItems="flex-end"> */}
           <Box className={s.title}>
             <Box className={s.title_inner} color={brandYellow200}>
@@ -73,7 +83,7 @@ export default function TokenDetailHero({
           <Text color="brand.camo.200">({tokenSymbol})</Text>
           {/* </Flex> */}
         </Stack>
-      </Flex>
+      </Stack>
       <Stack alignItems="flex-end" gap={6}>
         <Text color="brand.yellow.200" fontSize="4xl">
           {`${rewardValue} ${rewardToken}`}
@@ -85,6 +95,6 @@ export default function TokenDetailHero({
           )}
         </Flex>
       </Stack>
-    </Flex>
+    </Stack>
   );
 }

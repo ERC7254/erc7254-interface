@@ -1,0 +1,40 @@
+.mobileNav {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  // height: 80px;
+  padding: 20px;
+  background-color: var(--brand-camo-400);
+  border: 1px solid var(--brand-camo-300);
+  border-radius: 25px 25px 0 0;
+  color: var(--brand-camo-100);
+  svg {
+    fill: var(--brand-camo-100);
+  }
+
+  &_link {
+    position: relative;
+    color: var(--brand-camo-200);
+    transition: all 0.3s ease-in-out;
+    &.active {
+      color: var(--brand-yellow-200) !important;
+      svg {
+        fill: var(--brand-yellow-200) !important;
+      }
+
+      // &::after {
+      //   content: "";
+      //   display: block;
+      //   position: absolute;
+      //   width: 10px;
+      //   height: 10px;
+      //   background-color: var(--brand-yellow-200);
+      //   top: 0;
+      //   left: 50%;
+      //   transform: translateX(-50%) translateY(-100%)
+      // }
+    }
+  }
+}

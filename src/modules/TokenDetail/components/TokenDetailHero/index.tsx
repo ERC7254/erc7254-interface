@@ -29,7 +29,7 @@ export default function TokenDetailHero({
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress as `0x${string}`
+    tokenAddress as `0x${string}`,
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);

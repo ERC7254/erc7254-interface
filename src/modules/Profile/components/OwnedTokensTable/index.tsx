@@ -23,7 +23,7 @@ import s from "./style.module.scss";
 
 const getOwnedTokenListFetcher = (
   query: ReadonlyURLSearchParams,
-  userAddress?: `0x${string}`
+  userAddress?: `0x${string}`,
 ): {
   key: (string | number)[];
   fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
@@ -72,7 +72,7 @@ export default function OwnedTokensTable(): React.ReactElement {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   const columns = useMemo<ColumnDef<tTokenRevenue>[]>(
@@ -81,7 +81,7 @@ export default function OwnedTokensTable(): React.ReactElement {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
           const token = original.token;
@@ -124,12 +124,12 @@ export default function OwnedTokensTable(): React.ReactElement {
         header: "Reward",
         accessorKey: "reward",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => <RewardCell row={props.row} />,
         size: 30,
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -149,13 +149,13 @@ export default function OwnedTokensTable(): React.ReactElement {
           totalPages={ownedTokenList?.totalPages}
           onChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("page", p.toString())
+              pathname + "?" + createQueryString("page", p.toString()),
             );
           }}
           limit={Number(searchParams.get("limit")) || 10}
           onPageSizeChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("limit", p.toString())
+              pathname + "?" + createQueryString("limit", p.toString()),
             );
           }}
         />

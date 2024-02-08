@@ -43,11 +43,16 @@ export default function CustomTable({
   isLoading,
 }: ICustomTable): React.ReactElement {
   const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      pagination: {
+        pageIndex: 0,
+        pageSize,
+      },
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -55,7 +60,7 @@ export default function CustomTable({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: pageSize,
+        pageSize: pageSize || 10,
       },
     },
   });

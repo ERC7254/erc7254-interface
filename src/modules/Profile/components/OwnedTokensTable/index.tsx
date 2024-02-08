@@ -1,37 +1,90 @@
 "use client";
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  TableContainer,
-  Text,
-} from "@chakra-ui/react";
+import { Card, Flex, TableContainer, Text } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { CellContext, ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import React, { useMemo } from "react";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import React, { useCallback, useMemo } from "react";
 
+import CustomPagination from "@/components/CustomPagination";
 import CustomTable from "@/components/CustomTable";
-import { tokenList } from "@/constants/tokenList";
+import tokensService from "@/httpClients";
+import { PaginationResponse } from "@/httpClients/types";
 import { Link } from "@/libs/router-events";
-import { TokenRevenueClaimable } from "@/types/token-revenue";
+import { tTokenRevenue } from "@/types/token-revenue";
 
+import RewardCell from "../RewardCell";
 import s from "./style.module.scss";
 
+const getOwnedTokenListFetcher = (
+  query: ReadonlyURLSearchParams,
+): {
+  key: (string | number)[];
+  fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
+} => {
+  const chainId = process.env.NEXT_PUBLIC_CHAINID;
+  const limit = Number(query.get("limit")) || 10;
+  const page = Number(query.get("page")) || 1;
+  const userAddress = "0x05e3f412B12DAC5E0B30e62C8415538123661255";
+
+  const key = ["OwnedTokensPage", page, limit, userAddress];
+  const fetcher = async (): Promise<PaginationResponse<tTokenRevenue>> => {
+    const res = await tokensService.getOwnedTokenList({
+      chainId,
+      userAddress,
+      page,
+      limit,
+    });
+    return res;
+  };
+
+  return { key, fetcher };
+};
+
 export default function OwnedTokensTable(): React.ReactElement {
-  const columns = useMemo<ColumnDef<TokenRevenueClaimable>[]>(
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const tokenListFetcher = getOwnedTokenListFetcher(searchParams);
+
+  const {
+    data: ownedTokenList,
+    // refetch: tokenListRefetch,
+    isLoading,
+    // isError,
+  } = useQuery({
+    queryKey: tokenListFetcher.key,
+    queryFn: tokenListFetcher.fetcher,
+  });
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const columns = useMemo<ColumnDef<tTokenRevenue>[]>(
     () => [
       {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<TokenRevenueClaimable, unknown>,
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
-          const logo = original.logo;
-          const name = original.name;
-          const symbol = original.symbol;
-          const address = original.address;
+          const token = original.token;
+          const name = token.name;
+          const symbol = token.symbol;
+          const address = token.id;
 
           return (
             <Flex
@@ -42,9 +95,9 @@ export default function OwnedTokensTable(): React.ReactElement {
                 color: "yellow",
               }}
             >
-              <Box position="relative" overflow="hidden" borderRadius={50}>
-                <Image src={logo} width="20" height="20" alt="logo" />
-              </Box>
+              {/* <Box position="relative" overflow="hidden" borderRadius={50}>
+              <Image src={logo} width="20" height="20" alt="logo" />
+            </Box> */}
               <Link href={`/tokens/${address}`}>
                 <Text fontSize="sm" fontWeight="bold">
                   {name}
@@ -56,33 +109,21 @@ export default function OwnedTokensTable(): React.ReactElement {
             </Flex>
           );
         },
-        size: 50,
+        size: 40,
       },
 
       {
         header: "Total Supply",
         accessorKey: "totalSupply",
-        size: 20,
+        size: 30,
       },
       {
         header: "Reward",
         accessorKey: "reward",
-        size: 20,
-      },
-      {
-        header: "claim",
-        accessorKey: "claim",
         cell: (
-          props: CellContext<TokenRevenueClaimable, unknown>,
-        ): React.ReactElement => {
-          const reward = props.row.original.reward;
-          return (
-            <Button isDisabled={reward <= 0} size="xs" mb={1}>
-              Claim
-            </Button>
-          );
-        },
-        size: 10,
+          props: CellContext<tTokenRevenue, unknown>,
+        ): React.ReactElement => <RewardCell row={props.row} />,
+        size: 30,
       },
     ],
     [],
@@ -91,7 +132,28 @@ export default function OwnedTokensTable(): React.ReactElement {
   return (
     <Card className={s.tokensTable}>
       <TableContainer>
-        <CustomTable columns={columns} data={tokenList} size="sm" />
+        <CustomTable
+          isLoading={isLoading}
+          columns={columns}
+          data={ownedTokenList?.data}
+          size="sm"
+          hasIndexes
+        />
+        <CustomPagination
+          currentPage={Number(searchParams.get("page")) || 1}
+          totalPages={ownedTokenList?.totalPages}
+          onChange={(p) => {
+            router.push(
+              pathname + "?" + createQueryString("page", p.toString()),
+            );
+          }}
+          limit={Number(searchParams.get("limit")) || 10}
+          onPageSizeChange={(p) => {
+            router.push(
+              pathname + "?" + createQueryString("limit", p.toString()),
+            );
+          }}
+        />
       </TableContainer>
     </Card>
   );

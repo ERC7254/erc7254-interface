@@ -154,7 +154,7 @@ export default function TokensTable(): React.ReactElement {
           columns={columns}
           data={tokenList?.data}
           size="sm"
-          pageSize={Number(searchParams.get("limit"))}
+          pageSize={Number(searchParams.get("limit")) || 10}
           isLoading={isLoading}
         />
 
@@ -166,7 +166,7 @@ export default function TokensTable(): React.ReactElement {
               pathname + "?" + createQueryString("page", p.toString()),
             );
           }}
-          limit={Number(searchParams.get("limit"))}
+          limit={Number(searchParams.get("limit")) || 10}
           onPageSizeChange={(p) => {
             router.push(
               pathname + "?" + createQueryString("limit", p.toString()),

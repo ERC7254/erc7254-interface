@@ -27,7 +27,12 @@ export default function Header(): React.ReactElement {
           ) : (
             <DesktopNav navList={navList} />
           )}
-          <Button bg="transparent" _hover={{ bg: "transparent" }}>
+          <Button
+            bg="transparent"
+            _hover={{ bg: "transparent" }}
+            as="a"
+            href="/"
+          >
             <SvgInsert src="/branding/logo.svg" />
           </Button>
           {isConnected ? <Account /> : <ConnectWalletBtn />}

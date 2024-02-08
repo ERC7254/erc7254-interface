@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Input, Text, useToken } from "@chakra-ui/react";
 import { Table } from "@tanstack/react-table";
-import React from "react";
 import Select from "react-select";
 
 import { pageSizes } from "@/constants/pageSizes";
@@ -8,11 +7,21 @@ import { pageSizes } from "@/constants/pageSizes";
 import SvgInsert from "../SvgInsert";
 
 interface ICustomPagination {
-  table: Table<unknown>;
+  table?: Table<unknown>; // for FE pagination-simulate only
+  totalPages?: number;
+  currentPage: number;
+  limit?: number;
+  onChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
 export default function CustomPagination({
   table,
+  totalPages = 1,
+  currentPage,
+  limit,
+  onChange,
+  onPageSizeChange,
 }: ICustomPagination): React.ReactElement {
   const [brandYellow200, brandCamo300, brandCamo200] = useToken("colors", [
     "brand.yellow.200",
@@ -34,8 +43,12 @@ export default function CustomPagination({
         size="sm"
         variant="ghost"
         className="border rounded p-1"
-        onClick={() => table.setPageIndex(0)}
-        disabled={!table.getCanPreviousPage()}
+        onClick={() => {
+          if (table) table?.setPageIndex(0);
+          else onChange(1);
+        }}
+        // isDisabled={!table?.getCanPreviousPage()}
+        isDisabled={currentPage <= 1}
       >
         <Text fontSize="sm" fontWeight="bold">
           {"<<"}
@@ -45,8 +58,12 @@ export default function CustomPagination({
         size="sm"
         variant="ghost"
         className="border rounded p-1"
-        onClick={() => table.previousPage()}
-        disabled={!table.getCanPreviousPage()}
+        onClick={() => {
+          if (table) table.previousPage();
+          else onChange(currentPage - 1);
+        }}
+        // isDisabled={!table?.getCanPreviousPage()}
+        isDisabled={currentPage <= 1}
       >
         <Text fontSize="sm" fontWeight="bold">
           {"<"}
@@ -56,8 +73,12 @@ export default function CustomPagination({
         size="sm"
         variant="ghost"
         className="border rounded p-1"
-        onClick={() => table.nextPage()}
-        disabled={!table.getCanNextPage()}
+        onClick={() => {
+          if (table) table.nextPage();
+          else onChange(currentPage + 1);
+        }}
+        // isDisabled={!table?.getCanNextPage()}
+        isDisabled={currentPage >= totalPages}
       >
         <Text fontSize="sm" fontWeight="bold">
           {">"}
@@ -67,8 +88,12 @@ export default function CustomPagination({
         size="sm"
         variant="ghost"
         className="border rounded p-1"
-        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-        disabled={!table.getCanNextPage()}
+        onClick={() => {
+          if (table) table.setPageIndex(table?.getPageCount() - 1);
+          else onChange(totalPages);
+        }}
+        // isDisabled={!table?.getCanNextPage()}
+        isDisabled={currentPage >= totalPages}
       >
         <Text fontSize="sm" fontWeight="bold">
           {">>"}
@@ -79,7 +104,8 @@ export default function CustomPagination({
           Page
         </Text>
         <Text fontWeight="bold" fontSize="sm" color="brand.camo.100">
-          {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          {currentPage || Number(table?.getState().pagination.pageIndex) + 1} of{" "}
+          {totalPages || table?.getPageCount()}
         </Text>
       </Box>
       <Text
@@ -94,16 +120,25 @@ export default function CustomPagination({
           variant="filled"
           size="sm"
           type="number"
-          defaultValue={table.getState().pagination.pageIndex + 1}
+          defaultValue={
+            Number(table?.getState().pagination.pageIndex) + 1 || currentPage
+          }
           onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) - 1 : 0;
-            table.setPageIndex(page);
+            if (table) {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            } else {
+              onChange(parseInt(e.target.value));
+            }
           }}
         />
       </Text>
       <Select
-        onChange={(e) => table.setPageSize(Number(e?.value))}
-        placeholder="Show 10"
+        onChange={(e) => {
+          if (table) table.setPageSize(Number(e?.value));
+          else if (limit) onPageSizeChange(Number(e?.value));
+        }}
+        placeholder={`Show ${limit}`}
         components={components}
         menuPlacement="top"
         options={pageSizes}

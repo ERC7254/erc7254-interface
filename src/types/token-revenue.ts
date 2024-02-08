@@ -14,3 +14,18 @@ export type TokenRevenueClaimable = {
   logo: string;
   address: string;
 };
+
+export interface tTokenRevenue {
+  token: {
+    decimals: string;
+    id: string;
+    name: string;
+    symbol: string;
+  };
+  blockNumber: number;
+  blockTimestamp: number;
+  id: string;
+  owner: string;
+  totalSupply: number;
+  transactionHash: string;
+}

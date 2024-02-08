@@ -9,11 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { CellContext, ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useMemo } from "react";
 
 import CustomTable from "@/components/CustomTable";
 import { tokenList } from "@/constants/tokenList";
+import { Link } from "@/libs/router-events";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
 
 import s from "./style.module.scss";

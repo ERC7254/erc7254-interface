@@ -1,37 +1,96 @@
 "use client";
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  TableContainer,
-  Text,
-} from "@chakra-ui/react";
+import { Card, Flex, TableContainer, Text } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { CellContext, ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import React, { useCallback, useMemo } from "react";
 
+import CustomPagination from "@/components/CustomPagination";
 import CustomTable from "@/components/CustomTable";
-import { tokenList } from "@/constants/tokenList";
-import { TokenRevenueClaimable } from "@/types/token-revenue";
+import tokensService from "@/httpClients";
+import { PaginationResponse } from "@/httpClients/types";
+import { tTokenRevenue } from "@/types/token-revenue";
+import { formatDate } from "@/utils/formatDate";
 
+import RewardTokenCell from "../RewardTokenCell";
 import s from "./style.module.scss";
 
+const getTokenListFetcher = (
+  query: ReadonlyURLSearchParams,
+): {
+  key: (string | number)[];
+  fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
+} => {
+  const chainId = process.env.NEXT_PUBLIC_CHAINID;
+  const limit = Number(query.get("limit")) || 10;
+  const page = Number(query.get("page")) || 1;
+
+  const key = ["TokensPage", page, limit];
+  const fetcher = async (): Promise<PaginationResponse<tTokenRevenue>> => {
+    const res = await tokensService.getTokenList({
+      chainId,
+      page,
+      limit,
+    });
+    return res;
+  };
+
+  return { key, fetcher };
+};
+
 export default function TokensTable(): React.ReactElement {
-  const columns = useMemo<ColumnDef<TokenRevenueClaimable>[]>(
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const tokenListFetcher = getTokenListFetcher(searchParams);
+
+  const {
+    data: tokenList,
+    // refetch: tokenListRefetch,
+    isLoading,
+    // isError,
+  } = useQuery({
+    queryKey: tokenListFetcher.key,
+    queryFn: tokenListFetcher.fetcher,
+  });
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  // const formattedTokenList = useMemo<any[]>(() => {
+  //   tokenList.map((token) => {
+
+  //     token.tokenReward =
+  //   })
+  // }, [tokenList]);
+
+  const columns = useMemo<ColumnDef<tTokenRevenue>[]>(
     () => [
       {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<TokenRevenueClaimable, unknown>,
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
-          const logo = original.logo;
-          const name = original.name;
-          const symbol = original.symbol;
-          const address = original.address;
+          const token = original.token;
+          const name = token.name;
+          const symbol = token.symbol;
+          const address = token.id;
 
           return (
             <Flex
@@ -42,9 +101,9 @@ export default function TokensTable(): React.ReactElement {
                 color: "yellow",
               }}
             >
-              <Box position="relative" overflow="hidden" borderRadius={50}>
+              {/* <Box position="relative" overflow="hidden" borderRadius={50}>
                 <Image src={logo} width="20" height="20" alt="logo" />
-              </Box>
+              </Box> */}
               <Link href={`/tokens/${address}`}>
                 <Text fontSize="sm" fontWeight="bold">
                   {name}
@@ -65,22 +124,22 @@ export default function TokensTable(): React.ReactElement {
         size: 20,
       },
       {
-        header: "Reward",
-        accessorKey: "reward",
+        header: "Reward Token",
+        accessorKey: "rewardToken",
         size: 20,
+        cell: (
+          props: CellContext<tTokenRevenue, unknown>,
+        ): React.ReactElement => <RewardTokenCell row={props.row} />,
       },
       {
-        header: "claim",
-        accessorKey: "claim",
+        header: "Create at",
+        accessorKey: "timestamp",
         cell: (
-          props: CellContext<TokenRevenueClaimable, unknown>,
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
-          const reward = props.row.original.reward;
-          return (
-            <Button isDisabled={reward <= 0} size="xs" mb={1}>
-              Claim
-            </Button>
-          );
+          const timestamp = props.row.original.blockTimestamp;
+          const date = formatDate(timestamp);
+          return <Text fontSize="sm">{date}</Text>;
         },
         size: 10,
       },
@@ -91,7 +150,29 @@ export default function TokensTable(): React.ReactElement {
   return (
     <Card className={s.tokensTable}>
       <TableContainer>
-        <CustomTable columns={columns} data={tokenList} size="sm" />
+        <CustomTable
+          columns={columns}
+          data={tokenList?.data}
+          size="sm"
+          pageSize={Number(searchParams.get("limit"))}
+          isLoading={isLoading}
+        />
+
+        <CustomPagination
+          currentPage={Number(searchParams.get("page")) || 1}
+          totalPages={tokenList?.totalPages}
+          onChange={(p) => {
+            router.push(
+              pathname + "?" + createQueryString("page", p.toString()),
+            );
+          }}
+          limit={Number(searchParams.get("limit"))}
+          onPageSizeChange={(p) => {
+            router.push(
+              pathname + "?" + createQueryString("limit", p.toString()),
+            );
+          }}
+        />
       </TableContainer>
     </Card>
   );

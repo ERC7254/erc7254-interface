@@ -96,14 +96,6 @@ export default function HomeForm(): React.ReactElement {
     setIsErrorModalOpen(Boolean(error));
   }, [error]);
 
-  // const data = useReadContract({
-  //   chainId: 168587773,
-  //   abi: TokenRevenueAbi,
-  //   address: "0x0709973e3f5be86d4648dc3302d1aea227322cd7",
-  //   functionName: "symbol",
-  // });
-  // console.log(data);
-
   return (
     <Box className={s.form}>
       <Card

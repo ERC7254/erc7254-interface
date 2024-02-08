@@ -27,7 +27,11 @@ export default function TokenDetailHero({
           borderRadius="50%"
           overflow="hidden"
         >
-          <Image src={token?.logo as string} alt={token?.name as string} fill />
+          <Image
+            src={token?.logo || "/branding/placeholder-logo.png"}
+            alt={token?.name || "logo"}
+            fill
+          />
         </Box>
         <Stack>
           {/* <Flex gap={4} alignItems="flex-end"> */}

@@ -20,7 +20,7 @@ function isModifiedEvent(event: React.MouseEvent): boolean {
 
 export function shouldTriggerStartEvent(
   href: string,
-  clickEvent?: React.MouseEvent
+  clickEvent?: React.MouseEvent,
 ): boolean {
   const current = window.location;
   const target = getURL(href);

@@ -42,14 +42,16 @@ export function Account(): React.ReactElement {
       <PopoverContent>
         <PopoverBody>
           <VStack>
-            <Box>
-              <Button
-                width="full"
-                justifyContent="space-between"
-                variant="ghost"
-              >
-                <Link href="/profile">Profile</Link>
-              </Button>
+            <Box width="full">
+              <Link href="/profile">
+                <Button
+                  width="full"
+                  justifyContent="space-between"
+                  variant="ghost"
+                >
+                  Profile
+                </Button>
+              </Link>
             </Box>
 
             <Button

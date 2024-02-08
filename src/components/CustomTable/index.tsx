@@ -3,6 +3,7 @@
 import {
   Box,
   Flex,
+  Skeleton,
   Table,
   Tbody,
   Td,
@@ -22,23 +23,24 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 
-import CustomPagination from "../CustomPagination";
 import SvgInsert from "../SvgInsert";
 
 interface ICustomTable {
   columns: ColumnDef<any>[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-  data: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
+  data?: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
   pageSize?: number;
   size?: "sm" | "md" | "lg";
   hasIndexes?: boolean;
+  isLoading?: boolean;
 }
 
 export default function CustomTable({
   columns,
-  data,
+  data = [],
   pageSize = 10,
   size = "sm",
   hasIndexes = false,
+  isLoading,
 }: ICustomTable): React.ReactElement {
   const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
@@ -107,30 +109,51 @@ export default function CustomTable({
           ))}
         </Thead>
         <Tbody>
-          {table.getRowModel().rows.map((row, index) => {
-            return (
-              <Tr key={row.id}>
-                {hasIndexes && (
-                  <Td>
-                    <Text>{index + 1}</Text>
-                  </Td>
-                )}
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <Td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
+          {isLoading
+            ? [...Array(5)].map((_, index) => {
+                return (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Tr key={index}>
+                    {hasIndexes && (
+                      <Td>
+                        <Skeleton height="35px" />
+                      </Td>
+                    )}
+                    {[...Array(4)].map((_, innerIndex) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Td key={innerIndex}>
+                          <Skeleton height="35px" />
+                        </Td>
+                      );
+                    })}
+                  </Tr>
+                );
+              })
+            : table.getRowModel().rows.map((row, index) => {
+                return (
+                  <Tr key={row.id}>
+                    {hasIndexes && (
+                      <Td>
+                        <Text>{index + 1}</Text>
+                      </Td>
+                    )}
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <Td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </Td>
+                      );
+                    })}
+                  </Tr>
+                );
+              })}
         </Tbody>
       </Table>
-      <CustomPagination table={table} />
+      {/* <CustomPagination table={table} /> */}
     </>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { QueryParamProvider } from "use-query-params";
 import { State } from "wagmi";
 
 import { BlastThemeProvider } from "@/contexts/BlastThemeProvider";
@@ -18,9 +19,16 @@ export default function Providers({
   return (
     <WagmiProviders initialState={initialState}>
       <QueryClientProviders>
-        <BlastThemeProvider cookies={"blastTheme"}>
-          {children}
-        </BlastThemeProvider>
+        <QueryParamProvider
+          options={{
+            skipUpdateWhenNoChange: true,
+            updateType: "replaceIn",
+          }}
+        >
+          <BlastThemeProvider cookies={"blastTheme"}>
+            {children}
+          </BlastThemeProvider>
+        </QueryParamProvider>
       </QueryClientProviders>
     </WagmiProviders>
   );

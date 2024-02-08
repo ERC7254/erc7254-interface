@@ -43,7 +43,7 @@ strong {
     height: 100vh;
     background-color: #00000030;
     backdrop-filter: blur(5px);
-    pointer-events: none;
+    pointer-events: none !important;
   }
 }
 

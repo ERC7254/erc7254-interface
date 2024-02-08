@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
+import { Breadcrumb, BreadcrumbItem, Stack, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import Container from "@/components/Container";
 import { tokenList } from "@/constants/tokenList";
+import { Link } from "@/libs/router-events";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
 
 import TokenDetailHero from "./components/TokenDetailHero";
@@ -34,17 +29,17 @@ export default function TokenDetailPage({
   return (
     <Container className={s.tokenDetail}>
       <Stack spacing={6}>
-        <Breadcrumb>
+        <Breadcrumb fontSize="sm">
           <BreadcrumbItem>
-            <BreadcrumbLink href="/tokens">
+            <Link href="/tokens">
               <Text fontSize="sm">Tokens</Text>
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
 
           <BreadcrumbItem color="brand.yellow.200">
-            <BreadcrumbLink href="#">
+            <Link href="#">
               <Text fontSize="sm">Token ID: {id}</Text>
-            </BreadcrumbLink>
+            </Link>
           </BreadcrumbItem>
         </Breadcrumb>
       </Stack>

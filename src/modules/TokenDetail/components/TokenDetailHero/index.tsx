@@ -1,21 +1,51 @@
 "use client";
 import { Box, Button, Flex, Stack, Text, useToken } from "@chakra-ui/react";
 import Image from "next/image";
+import { useAccount, useWriteContract } from "wagmi";
 
+import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
+import useRewardTokenName from "@/hooks/useRewardTokenName";
+import useRewardValue from "@/hooks/useRewardValue";
+import useTokenName from "@/hooks/useTokenName";
+import useTokenSymbol from "@/hooks/useTokenSymbol";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
 
 import s from "./style.module.scss";
 
 interface ITokenDetailHero {
   token?: TokenRevenueClaimable;
+  tokenAddress: string;
 }
 
 export default function TokenDetailHero({
   token,
+  tokenAddress,
 }: ITokenDetailHero): React.ReactElement {
   const [brandYellow200] = useToken("colors", ["brand.yellow.200"]);
+  const account = useAccount();
+  const { isConnected, address: userAddress } = account;
+  const { writeContract } = useWriteContract();
 
-  // const { name, symbol, reward, tokenReward, logo } = token;
+  const tokenName = useTokenName(tokenAddress as `0x${string}`);
+  const rewardValue = useRewardValue(
+    userAddress as `0x${string}`,
+    tokenAddress as `0x${string}`
+  );
+  const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
+  const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
+
+  const handleClaimReward = (): void => {
+    console.log(isConnected);
+    isConnected
+      ? writeContract({
+          chainId: 168587773,
+          address: tokenAddress as `0x${string}`,
+          abi: TokenRevenueAbi,
+          functionName: "getReward",
+          args: [[tokenAddress], userAddress],
+        })
+      : null;
+  };
 
   return (
     <Flex justifyContent="space-between" alignItems="flex-end" mb="64px">
@@ -29,7 +59,7 @@ export default function TokenDetailHero({
         >
           <Image
             src={token?.logo || "/branding/placeholder-logo.png"}
-            alt={token?.name || "logo"}
+            alt={tokenName || "logo"}
             fill
           />
         </Box>
@@ -37,20 +67,22 @@ export default function TokenDetailHero({
           {/* <Flex gap={4} alignItems="flex-end"> */}
           <Box className={s.title}>
             <Box className={s.title_inner} color={brandYellow200}>
-              <Text className={s.bigTitle}>{token?.name}</Text>
+              <Text className={s.bigTitle}>{tokenName}</Text>
             </Box>
           </Box>
-          <Text color="brand.camo.200">({token?.symbol})</Text>
+          <Text color="brand.camo.200">({tokenSymbol})</Text>
           {/* </Flex> */}
         </Stack>
       </Flex>
       <Stack alignItems="flex-end" gap={6}>
         <Text color="brand.yellow.200" fontSize="4xl">
-          {`${token?.reward} ${token?.tokenReward}`}
+          {`${rewardValue} ${rewardToken}`}
         </Text>
         <Flex gap={6}>
           <Button variant="ghost">UPDATE REWARD</Button>
-          {Number(token?.reward) > 0 && <Button>CLAIM REWARD</Button>}
+          {Number(rewardValue) > 0 && (
+            <Button onClick={() => handleClaimReward()}>CLAIM REWARD</Button>
+          )}
         </Flex>
       </Stack>
     </Flex>

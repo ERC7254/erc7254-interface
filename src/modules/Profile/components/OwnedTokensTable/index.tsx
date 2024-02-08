@@ -9,6 +9,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
+import { useAccount } from "wagmi";
 
 import CustomPagination from "@/components/CustomPagination";
 import CustomTable from "@/components/CustomTable";
@@ -22,6 +23,7 @@ import s from "./style.module.scss";
 
 const getOwnedTokenListFetcher = (
   query: ReadonlyURLSearchParams,
+  userAddress?: `0x${string}`,
 ): {
   key: (string | number)[];
   fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
@@ -29,9 +31,8 @@ const getOwnedTokenListFetcher = (
   const chainId = process.env.NEXT_PUBLIC_CHAINID;
   const limit = Number(query.get("limit")) || 10;
   const page = Number(query.get("page")) || 1;
-  const userAddress = "0x05e3f412B12DAC5E0B30e62C8415538123661255";
 
-  const key = ["OwnedTokensPage", page, limit, userAddress];
+  const key = ["OwnedTokensPage", page, limit, userAddress as string];
   const fetcher = async (): Promise<PaginationResponse<tTokenRevenue>> => {
     const res = await tokensService.getOwnedTokenList({
       chainId,
@@ -49,8 +50,10 @@ export default function OwnedTokensTable(): React.ReactElement {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const account = useAccount();
+  const userAddress = account.address;
 
-  const tokenListFetcher = getOwnedTokenListFetcher(searchParams);
+  const tokenListFetcher = getOwnedTokenListFetcher(searchParams, userAddress);
 
   const {
     data: ownedTokenList,

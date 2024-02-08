@@ -1,13 +1,14 @@
 "use client";
 
-import { Breadcrumb, BreadcrumbItem, Stack, Text } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import Container from "@/components/Container";
 import { tokenList } from "@/constants/tokenList";
-import { Link } from "@/libs/router-events";
+import useTokenName from "@/hooks/useTokenName";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
 
+import TokenDetailBreadcrumb from "./components/TokenDetailBreadcrumb";
 import TokenDetailHero from "./components/TokenDetailHero";
 import TokenDetailHistory from "./components/TokenDetailHistory";
 import s from "./style.module.scss";
@@ -20,6 +21,8 @@ export default function TokenDetailPage({
 }: ITokenDetailPage): React.ReactElement {
   const [foundToken, setFoundToken] = useState<TokenRevenueClaimable>();
 
+  const tokenName = useTokenName(id as `0x${string}`);
+
   useEffect(() => {
     if (!foundToken) {
       setFoundToken(tokenList.find((token) => token.address === id));
@@ -29,22 +32,10 @@ export default function TokenDetailPage({
   return (
     <Container className={s.tokenDetail}>
       <Stack spacing={6}>
-        <Breadcrumb fontSize="sm">
-          <BreadcrumbItem>
-            <Link href="/tokens">
-              <Text fontSize="sm">Tokens</Text>
-            </Link>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem color="brand.yellow.200">
-            <Link href="#">
-              <Text fontSize="sm">Token ID: {id}</Text>
-            </Link>
-          </BreadcrumbItem>
-        </Breadcrumb>
+        <TokenDetailBreadcrumb tokenName={tokenName} />
+        <TokenDetailHero token={foundToken} tokenAddress={id} />
+        <TokenDetailHistory />
       </Stack>
-      <TokenDetailHero token={foundToken} />
-      <TokenDetailHistory />
     </Container>
   );
 }

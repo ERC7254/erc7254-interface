@@ -50,13 +50,12 @@ export default function Input({
           </Text>
           <ChakraInput
             type={type}
+            step="0.01"
             placeholder={placeholder}
             variant="filled"
             size="lg"
             {...field}
-            value={
-              type === "number" ? Number(field.value).toString() : field.value
-            }
+            value={field.value}
             onChange={(e) => {
               if (onChange) {
                 onChange(e);

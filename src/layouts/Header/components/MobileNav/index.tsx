@@ -40,6 +40,7 @@ export default function MobileNav({ navList }: IMobileNav) {
       {navList.map((navItem) => {
         return (
           <Link
+            key={navItem.name}
             href={navItem.link}
             className={`${s.mobileNav_link} ${pathname === navItem.link ? s.active : ""}`}
           >

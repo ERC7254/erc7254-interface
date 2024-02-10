@@ -16,7 +16,6 @@ import CustomTable from "@/components/CustomTable";
 import tokensService from "@/httpClients";
 import { PaginationResponse } from "@/httpClients/types";
 import { tTokenRevenue } from "@/types/token-revenue";
-import { formatDate } from "@/utils/formatDate";
 
 import RewardTokenCell from "../RewardTokenCell";
 import s from "./style.module.scss";
@@ -138,8 +137,8 @@ export default function TokensTable(): React.ReactElement {
           props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const timestamp = props.row.original.blockTimestamp;
-          const date = formatDate(timestamp);
-          return <Text fontSize="sm">{date}</Text>;
+          // const date = formatDate(timestamp);
+          return <Text fontSize="sm">{timestamp}</Text>;
         },
         size: 10,
       },

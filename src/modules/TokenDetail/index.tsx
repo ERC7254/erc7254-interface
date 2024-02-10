@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import Container from "@/components/Container";
 import { tokenList } from "@/constants/tokenList";
-import useTokenName from "@/hooks/useTokenName";
+import useTokenName from "@/hooks/web3/useTokenName";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
 
 import TokenDetailBreadcrumb from "./components/TokenDetailBreadcrumb";

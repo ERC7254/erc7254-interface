@@ -1,15 +1,27 @@
 "use client";
-import { Box, Button, Flex, Stack, Text, useToken } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Stack,
+  Text,
+  useDisclosure,
+  useToken,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { useAccount, useWriteContract } from "wagmi";
 
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
-import useRewardTokenName from "@/hooks/useRewardTokenName";
-import useRewardValue from "@/hooks/useRewardValue";
-import useTokenName from "@/hooks/useTokenName";
-import useTokenSymbol from "@/hooks/useTokenSymbol";
+import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
+import useRewardValueDisplay from "@/hooks/web3/useRewardValueDisplay";
+import useTokenName from "@/hooks/web3/useTokenName";
+import useTokenSymbol from "@/hooks/web3/useTokenSymbol";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
+import { tokenRevertMapping } from "@/utils/tokenMapping";
+import { truncateAddress } from "@/utils/truncateAddress";
 
+import MintModal from "../MintModal";
+import UpdateRewardModal from "../UpdateRewardModal";
 import s from "./style.module.scss";
 
 interface ITokenDetailHero {
@@ -27,22 +39,33 @@ export default function TokenDetailHero({
   const { writeContract } = useWriteContract();
 
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
-  const rewardValue = useRewardValue(
+  const rewardValue = useRewardValueDisplay(
     userAddress as `0x${string}`,
     tokenAddress as `0x${string}`,
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
+  const tokenRewardAddress = tokenRevertMapping(rewardToken);
+  const {
+    isOpen: isUpdateRewardModalOpen,
+    onOpen: onUpdateRewardModalOpen,
+    onClose: onUpdateRewardModalClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isMintModalOpen,
+    onOpen: onMintModalOpen,
+    onClose: onMintModalClose,
+  } = useDisclosure();
 
   const handleClaimReward = (): void => {
-    console.log(isConnected);
     isConnected
       ? writeContract({
           chainId: 168587773,
           address: tokenAddress as `0x${string}`,
           abi: TokenRevenueAbi,
           functionName: "getReward",
-          args: [[tokenAddress], userAddress],
+          args: [[tokenRewardAddress], userAddress],
         })
       : null;
   };
@@ -73,27 +96,46 @@ export default function TokenDetailHero({
             fill
           />
         </Box>
-        <Stack direction={{ base: "row", md: "column" }} alignItems="flex-end">
-          {/* <Flex gap={4} alignItems="flex-end"> */}
-          <Box className={s.title}>
+        <Stack gap={2} alignItems="baseline">
+          <Box className={s.title} maxWidth="500px">
             <Box className={s.title_inner} color={brandYellow200}>
               <Text className={s.bigTitle}>{tokenName}</Text>
             </Box>
           </Box>
-          <Text color="brand.camo.200">({tokenSymbol})</Text>
-          {/* </Flex> */}
+          <Flex>
+            <Text fontSize="lg" fontWeight="bold" color="brand.camo.200">
+              ({tokenSymbol}) - {truncateAddress(tokenAddress)}
+            </Text>
+          </Flex>
         </Stack>
       </Stack>
-      <Stack alignItems="flex-end" gap={6}>
+      <Stack alignItems="flex-end">
         <Text color="brand.yellow.200" fontSize="4xl">
           {`${rewardValue} ${rewardToken}`}
         </Text>
         <Flex gap={6}>
-          <Button variant="ghost">UPDATE REWARD</Button>
+          <Button variant="ghost" onClick={onMintModalOpen}>
+            MINT
+          </Button>
+          <Button variant="ghost" onClick={onUpdateRewardModalOpen}>
+            UPDATE REWARD
+          </Button>
           {Number(rewardValue) > 0 && (
             <Button onClick={() => handleClaimReward()}>CLAIM REWARD</Button>
           )}
         </Flex>
+
+        <MintModal
+          tokenAddress={tokenAddress as `0x${string}`}
+          isOpen={isMintModalOpen}
+          onClose={onMintModalClose}
+        />
+
+        <UpdateRewardModal
+          tokenAddress={tokenAddress as `0x${string}`}
+          isOpen={isUpdateRewardModalOpen}
+          onClose={onUpdateRewardModalClose}
+        />
       </Stack>
     </Stack>
   );

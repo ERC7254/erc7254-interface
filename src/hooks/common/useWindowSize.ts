@@ -1,4 +1,4 @@
-import { useIsomorphicLayoutEffect } from "@Hooks/useIsomorphicLayoutEffect";
+import { useIsomorphicLayoutEffect } from "@Hooks/common/useIsomorphicLayoutEffect";
 import { debounce } from "@Utils/uiHelper";
 import { useMemo, useState } from "react";
 

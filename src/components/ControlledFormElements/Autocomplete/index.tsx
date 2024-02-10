@@ -138,6 +138,7 @@ export default function Autocomplete({
                 background: "black",
                 borderRadius: "25px",
                 padding: "24px",
+                width: "300px",
               }),
               singleValue: (baseStyles) => ({
                 ...baseStyles,

@@ -13,6 +13,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { parseEther } from "viem";
 import {
   BaseError,
   useAccount,
@@ -67,18 +68,15 @@ export default function HomeForm(): React.ReactElement {
   const { data: hash, error, writeContract } = useWriteContract();
 
   const onSubmit = (data: TokenRevenue): void => {
+    const parseAmount = parseEther(data.totalSupply.toString());
+
     isConnected
       ? writeContract({
           chainId: 168587773,
           address: "0x7f47E53D7eEeB1eC1C5b9ec10db6F172d9e1Dbdd",
           abi: factoryAbi,
           functionName: "create",
-          args: [
-            data.name,
-            data.symbol,
-            data.tokenReward,
-            data.totalSupply * 10 ** 18,
-          ],
+          args: [data.name, data.symbol, data.tokenReward, parseAmount],
         })
       : onOpen();
   };

@@ -12,3 +12,16 @@ export const tokenMapping = (
   if (!tokenName) return "/";
   return tokenName;
 };
+
+export const tokenRevertMapping = (
+  tokenName: string | undefined,
+): string | undefined => {
+  if (!tokenName) return "";
+
+  // Find the address by searching through the mapping
+  const address = Object.keys(addressToTokenMapping).find(
+    (key) => addressToTokenMapping[key] === tokenName,
+  );
+
+  return address || "/";
+};

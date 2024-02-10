@@ -1,12 +1,12 @@
 "use client";
 
-import { Box, Button, HStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, IconButton } from "@chakra-ui/react";
 import Container from "@Components/Container";
 import SvgInsert from "@Components/SvgInsert";
 import { useAccount } from "wagmi";
 
 import { navList } from "@/constants/navList";
-import useWindowSize from "@/hooks/useWindowSize";
+import useWindowSize from "@/hooks/common/useWindowSize";
 
 import { Account } from "./components/Account";
 import ConnectWalletBtn from "./components/ConnectWalletBtn";
@@ -35,7 +35,23 @@ export default function Header(): React.ReactElement {
           >
             <SvgInsert src="/branding/logo.svg" />
           </Button>
-          {isConnected ? <Account /> : <ConnectWalletBtn />}
+          <Flex gap={2} alignItems="center">
+            <IconButton
+              as="a"
+              href="https://github.com/ethereum/ERCs/blob/master/ERCS/erc-7254.md"
+              aria-label="github"
+              target="_blank"
+              aspectRatio={1}
+              variant="ghost"
+              icon={
+                <SvgInsert
+                  src="/branding/github.svg"
+                  className={s.githubLogo}
+                />
+              }
+            />
+            {isConnected ? <Account /> : <ConnectWalletBtn />}
+          </Flex>
         </HStack>
       </Container>
     </Box>

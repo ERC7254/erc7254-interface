@@ -6,10 +6,10 @@ import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
 const useRewardValue = (
   userAddress: `0x${string}`,
   tokenAddress: `0x${string}`,
-): string | undefined => {
-  const [rewardValue, setRewardValue] = useState("");
+): bigint | undefined => {
+  const [rewardValue, setRewardValue] = useState<bigint>(0n);
 
-  const tokenValueRes = useReadContract({
+  const res = useReadContract({
     chainId: 168587773,
     abi: TokenRevenueAbi,
     address: tokenAddress as `0x${string}`,
@@ -18,20 +18,11 @@ const useRewardValue = (
   });
 
   useEffect(() => {
-    if (
-      tokenValueRes.data === undefined ||
-      tokenValueRes.data === null ||
-      !tokenValueRes.data
-    )
-      return;
+    if (res.data === undefined || res.data === null || !res.data) return;
     else {
-      setRewardValue(
-        (
-          Number((tokenValueRes.data as bigint[])[0]) / Number(10n ** 18n)
-        ).toFixed(4),
-      );
+      setRewardValue((res.data as bigint[])[0] / 10n ** 18n);
     }
-  }, [tokenValueRes.data]);
+  }, [res.data]);
 
   return rewardValue;
 };

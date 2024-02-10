@@ -10,9 +10,9 @@ import {
   Input,
   Text,
 } from "@chakra-ui/react";
+import usePagination from "@Hooks/common/usePagination";
 import React, { useState } from "react";
 
-import usePagination from "@Hooks/common/usePagination";
 import { checkIsNumber } from "@/utils/checkIsNumber";
 
 interface IIPagination {
@@ -112,7 +112,7 @@ export default function Pagination({
                   {value}
                 </Button>
               );
-            })
+            }),
           )}
         </Flex>
 

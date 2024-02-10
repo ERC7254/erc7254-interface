@@ -92,7 +92,7 @@ export default function CustomTable({
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext(),
+                        header.getContext()
                       )}
                       {{
                         asc: <SvgInsert src="/icons/chevron.svg" />,
@@ -136,7 +136,13 @@ export default function CustomTable({
             })
           : table.getRowModel().rows.map((row, index) => {
               return (
-                <Tr key={row.id}>
+                <Tr
+                  key={row.id}
+                  transition="all 0.15s ease-out"
+                  _hover={{
+                    bg: "brand.camo.300",
+                  }}
+                >
                   {hasIndexes && (
                     <Td>
                       <Text>{index + 1}</Text>
@@ -147,7 +153,7 @@ export default function CustomTable({
                       <Td key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext(),
+                          cell.getContext()
                         )}
                       </Td>
                     );

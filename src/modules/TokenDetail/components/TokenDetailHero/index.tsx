@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Flex,
+  IconButton,
   Stack,
   Text,
   useDisclosure,
@@ -23,6 +24,8 @@ import { truncateAddress } from "@/utils/truncateAddress";
 import MintModal from "../MintModal";
 import UpdateRewardModal from "../UpdateRewardModal";
 import s from "./style.module.scss";
+import { useCopyToClipboard } from "@/hooks/common/useCopyToClipboard";
+import SvgInsert from "@/components/SvgInsert";
 
 interface ITokenDetailHero {
   token?: TokenRevenueClaimable;
@@ -37,11 +40,12 @@ export default function TokenDetailHero({
   const account = useAccount();
   const { isConnected, address: userAddress } = account;
   const { writeContract } = useWriteContract();
+  const [_, copy] = useCopyToClipboard();
 
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
   const rewardValue = useRewardValueDisplay(
     userAddress as `0x${string}`,
-    tokenAddress as `0x${string}`,
+    tokenAddress as `0x${string}`
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
@@ -68,6 +72,10 @@ export default function TokenDetailHero({
           args: [[tokenRewardAddress], userAddress],
         })
       : null;
+  };
+
+  const handleCopy = (text: string) => () => {
+    copy(text);
   };
 
   return (
@@ -102,40 +110,58 @@ export default function TokenDetailHero({
               <Text className={s.bigTitle}>{tokenName}</Text>
             </Box>
           </Box>
-          <Flex>
+          <Flex gap={2}>
             <Text fontSize="lg" fontWeight="bold" color="brand.camo.200">
               ({tokenSymbol}) - {truncateAddress(tokenAddress)}
             </Text>
+            <IconButton
+              isRound
+              size="sm"
+              variant="ghost"
+              onClick={handleCopy(tokenAddress as string)}
+              aria-label="Copy address"
+              icon={<SvgInsert src="/icons/copy.svg" className={s.icon} />}
+            />
           </Flex>
         </Stack>
       </Stack>
       <Stack alignItems="flex-end">
-        <Text color="brand.yellow.200" fontSize="4xl">
-          {`${rewardValue} ${rewardToken}`}
-        </Text>
-        <Flex gap={6}>
-          <Button variant="ghost" onClick={onMintModalOpen}>
-            MINT
-          </Button>
-          <Button variant="ghost" onClick={onUpdateRewardModalOpen}>
-            UPDATE REWARD
-          </Button>
-          {Number(rewardValue) > 0 && (
-            <Button onClick={() => handleClaimReward()}>CLAIM REWARD</Button>
-          )}
-        </Flex>
+        {isConnected ? (
+          <>
+            <Text color="brand.yellow.200" fontSize="4xl">
+              {`${rewardValue} ${rewardToken}`}
+            </Text>
+            <Flex gap={6}>
+              <Button variant="ghost" onClick={onMintModalOpen}>
+                MINT
+              </Button>
+              <Button variant="ghost" onClick={onUpdateRewardModalOpen}>
+                UPDATE REWARD
+              </Button>
+              {Number(rewardValue) > 0 && (
+                <Button onClick={() => handleClaimReward()}>
+                  CLAIM REWARD
+                </Button>
+              )}
+            </Flex>
 
-        <MintModal
-          tokenAddress={tokenAddress as `0x${string}`}
-          isOpen={isMintModalOpen}
-          onClose={onMintModalClose}
-        />
+            <MintModal
+              tokenAddress={tokenAddress as `0x${string}`}
+              isOpen={isMintModalOpen}
+              onClose={onMintModalClose}
+            />
 
-        <UpdateRewardModal
-          tokenAddress={tokenAddress as `0x${string}`}
-          isOpen={isUpdateRewardModalOpen}
-          onClose={onUpdateRewardModalClose}
-        />
+            <UpdateRewardModal
+              tokenAddress={tokenAddress as `0x${string}`}
+              isOpen={isUpdateRewardModalOpen}
+              onClose={onUpdateRewardModalClose}
+            />
+          </>
+        ) : (
+          <Text color="brand.camo.300" fontSize="sm">
+            (Please connect wallet first)
+          </Text>
+        )}
       </Stack>
     </Stack>
   );

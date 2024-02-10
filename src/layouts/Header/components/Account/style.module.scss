@@ -28,6 +28,10 @@
   animation: blink normal 1.5s infinite ease-in-out;
 }
 
+.icon {
+  fill: var(--brand-camo-200);
+}
+
 @keyframes blink {
   0% {
     background-color: var(--brand-yellow-200);

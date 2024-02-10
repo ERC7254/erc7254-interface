@@ -2,7 +2,6 @@
 import { Card, CardFooter, Flex, TableContainer, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { CellContext, ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import {
   ReadonlyURLSearchParams,
   usePathname,
@@ -19,9 +18,10 @@ import { tTokenRevenue } from "@/types/token-revenue";
 
 import RewardTokenCell from "../RewardTokenCell";
 import s from "./style.module.scss";
+import { Link } from "@/libs/router-events";
 
 const getTokenListFetcher = (
-  query: ReadonlyURLSearchParams,
+  query: ReadonlyURLSearchParams
 ): {
   key: (string | number)[];
   fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
@@ -67,7 +67,7 @@ export default function TokensTable(): React.ReactElement {
 
       return params.toString();
     },
-    [searchParams],
+    [searchParams]
   );
 
   // const formattedTokenList = useMemo<any[]>(() => {
@@ -83,7 +83,7 @@ export default function TokensTable(): React.ReactElement {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>,
+          props: CellContext<tTokenRevenue, unknown>
         ): React.ReactElement => {
           const original = props.row.original;
           const token = original.token;
@@ -92,26 +92,26 @@ export default function TokensTable(): React.ReactElement {
           const address = token.id;
 
           return (
-            <Flex
-              alignItems="center"
-              gap={2}
-              height="100%"
-              _hover={{
-                color: "yellow",
-              }}
-            >
-              {/* <Box position="relative" overflow="hidden" borderRadius={50}>
+            <Link href={`/tokens/${address}`}>
+              <Flex
+                alignItems="center"
+                gap={2}
+                height="100%"
+                _hover={{
+                  color: "yellow",
+                }}
+              >
+                {/* <Box position="relative" overflow="hidden" borderRadius={50}>
                 <Image src={logo} width="20" height="20" alt="logo" />
               </Box> */}
-              <Link href={`/tokens/${address}`}>
                 <Text fontSize="sm" fontWeight="bold">
                   {name}
                 </Text>
-              </Link>
-              <Text fontSize="sm" color="#ffffff90">
-                ({symbol})
-              </Text>
-            </Flex>
+                <Text fontSize="sm" color="#ffffff90">
+                  ({symbol})
+                </Text>
+              </Flex>
+            </Link>
           );
         },
         size: 50,
@@ -127,14 +127,14 @@ export default function TokensTable(): React.ReactElement {
         accessorKey: "rewardToken",
         size: 20,
         cell: (
-          props: CellContext<tTokenRevenue, unknown>,
+          props: CellContext<tTokenRevenue, unknown>
         ): React.ReactElement => <RewardTokenCell row={props.row} />,
       },
       {
         header: "Create at",
         accessorKey: "timestamp",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>,
+          props: CellContext<tTokenRevenue, unknown>
         ): React.ReactElement => {
           const timestamp = props.row.original.blockTimestamp;
           // const date = formatDate(timestamp);
@@ -143,7 +143,7 @@ export default function TokensTable(): React.ReactElement {
         size: 10,
       },
     ],
-    [],
+    []
   );
 
   return (
@@ -163,13 +163,13 @@ export default function TokensTable(): React.ReactElement {
           totalPages={tokenList?.totalPages}
           onChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("page", p.toString()),
+              pathname + "?" + createQueryString("page", p.toString())
             );
           }}
           limit={Number(searchParams.get("limit")) || 10}
           onPageSizeChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("limit", p.toString()),
+              pathname + "?" + createQueryString("limit", p.toString())
             );
           }}
         />

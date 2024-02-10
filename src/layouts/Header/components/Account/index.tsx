@@ -12,6 +12,7 @@ import {
   useToken,
   VStack,
 } from "@chakra-ui/react";
+import { useCopyToClipboard } from "@Hooks/common/useCopyToClipboard";
 import { useEffect, useState } from "react";
 import { useAccount, useBalance, useDisconnect } from "wagmi";
 
@@ -20,7 +21,6 @@ import { Link } from "@/libs/router-events";
 import { truncateAddress } from "@/utils/truncateAddress";
 
 import s from "./style.module.scss";
-import { useCopyToClipboard } from "@Hooks/common/useCopyToClipboard";
 
 export function Account(): React.ReactElement {
   const [_, copy] = useCopyToClipboard();

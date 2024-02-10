@@ -13,6 +13,8 @@ import Image from "next/image";
 import { useAccount, useWriteContract } from "wagmi";
 
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
+import SvgInsert from "@/components/SvgInsert";
+import { useCopyToClipboard } from "@/hooks/common/useCopyToClipboard";
 import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
 import useRewardValueDisplay from "@/hooks/web3/useRewardValueDisplay";
 import useTokenName from "@/hooks/web3/useTokenName";
@@ -24,8 +26,6 @@ import { truncateAddress } from "@/utils/truncateAddress";
 import MintModal from "../MintModal";
 import UpdateRewardModal from "../UpdateRewardModal";
 import s from "./style.module.scss";
-import { useCopyToClipboard } from "@/hooks/common/useCopyToClipboard";
-import SvgInsert from "@/components/SvgInsert";
 
 interface ITokenDetailHero {
   token?: TokenRevenueClaimable;
@@ -45,7 +45,7 @@ export default function TokenDetailHero({
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
   const rewardValue = useRewardValueDisplay(
     userAddress as `0x${string}`,
-    tokenAddress as `0x${string}`
+    tokenAddress as `0x${string}`,
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);

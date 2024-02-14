@@ -21,7 +21,9 @@ import {
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
 import SvgInsert from "@/components/SvgInsert";
 import { useCopyToClipboard } from "@/hooks/common/useCopyToClipboard";
+import useAllowance from "@/hooks/web3/useAllowance";
 import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
+import useRewardValue from "@/hooks/web3/useRewardValue";
 import useRewardValueDisplay from "@/hooks/web3/useRewardValueDisplay";
 import useTokenName from "@/hooks/web3/useTokenName";
 import useTokenSymbol from "@/hooks/web3/useTokenSymbol";
@@ -31,6 +33,7 @@ import { truncateAddress } from "@/utils/truncateAddress";
 import ErrorModal from "../ErrorModal";
 import MintModal from "../MintModal";
 import SuccessModal from "../SuccessModal";
+import UpdateApproveModal from "../UpdateAllowanceModal";
 import UpdateRewardModal from "../UpdateRewardModal";
 import s from "./style.module.scss";
 
@@ -46,6 +49,11 @@ export default function TokenDetailHero({
   const [brandYellow200] = useToken("colors", ["brand.yellow.200"]);
   const account = useAccount();
   const { isConnected, address: userAddress } = account;
+  const allowance = useAllowance(
+    userAddress as `0x${string}`,
+    tokenAddress as `0x${string}`,
+  );
+
   const { data: hash, error, writeContract } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
@@ -56,10 +64,15 @@ export default function TokenDetailHero({
   const [_, copy] = useCopyToClipboard();
 
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
-  const rewardValue = useRewardValueDisplay(
+  const rewardValueDisplay = useRewardValueDisplay(
     userAddress as `0x${string}`,
     tokenAddress as `0x${string}`,
   );
+  const rewardValue = useRewardValue(
+    userAddress as `0x${string}`,
+    tokenAddress as `0x${string}`,
+  );
+
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
   const tokenRewardAddress = rewardToken.address;
@@ -150,7 +163,7 @@ export default function TokenDetailHero({
         {isConnected ? (
           <>
             <Text color="brand.yellow.200" fontSize="4xl">
-              {`${rewardValue} ${rewardToken.name}`}
+              {`${rewardValueDisplay} ${rewardToken.name}`}
             </Text>
             <Flex gap={6}>
               <Button variant="ghost" onClick={onMintModalOpen}>
@@ -159,7 +172,7 @@ export default function TokenDetailHero({
               <Button variant="ghost" onClick={onUpdateRewardModalOpen}>
                 UPDATE REWARD
               </Button>
-              {Number(rewardValue) > 0 && (
+              {Number(rewardValueDisplay) > 0 && (
                 <Button
                   onClick={() => handleClaimReward()}
                   isLoading={isConfirming}
@@ -175,11 +188,19 @@ export default function TokenDetailHero({
               onClose={onMintModalClose}
             />
 
-            <UpdateRewardModal
-              tokenAddress={tokenAddress as `0x${string}`}
-              isOpen={isUpdateRewardModalOpen}
-              onClose={onUpdateRewardModalClose}
-            />
+            {allowance! <= rewardValue! && rewardToken.name !== "ETH" ? (
+              <UpdateApproveModal
+                tokenAddress={tokenAddress as `0x${string}`}
+                isOpen={isUpdateRewardModalOpen}
+                onClose={onUpdateRewardModalClose}
+              />
+            ) : (
+              <UpdateRewardModal
+                tokenAddress={tokenAddress as `0x${string}`}
+                isOpen={isUpdateRewardModalOpen}
+                onClose={onUpdateRewardModalClose}
+              />
+            )}
           </>
         ) : (
           <Text color="brand.camo.300" fontSize="sm">

@@ -19,7 +19,7 @@ const useAllowance = (
   useEffect(() => {
     if (res.data === undefined || res.data === null || !res.data) return;
     else {
-      setAllowance((res.data as bigint) / 10n ** 18n);
+      setAllowance(res.data);
     }
   }, [res.data]);
 

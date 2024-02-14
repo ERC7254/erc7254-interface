@@ -20,7 +20,7 @@ const useRewardValue = (
   useEffect(() => {
     if (res.data === undefined || res.data === null || !res.data) return;
     else {
-      setRewardValue((res.data as bigint[])[0] / 10n ** 18n);
+      setRewardValue((res.data as bigint[])[0]);
     }
   }, [res.data]);
 

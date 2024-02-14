@@ -9,6 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { erc20Abi, parseEther } from "viem";
 import {
@@ -23,7 +24,6 @@ import Input from "@/components/ControlledFormElements/Input";
 import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
 
 import SuccessModal from "../SuccessModal";
-import { useEffect } from "react";
 
 interface UpdateApproveModalProps {
   tokenAddress: `0x${string}`;

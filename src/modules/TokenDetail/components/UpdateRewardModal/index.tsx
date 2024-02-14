@@ -78,7 +78,7 @@ export default function UpdateRewardModal({
             return Number(value) * Number(10n ** 18n) < Number(allowance);
           }
           return true;
-        }
+        },
       ),
   });
 
@@ -111,7 +111,7 @@ export default function UpdateRewardModal({
 
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress
+    tokenAddress,
   );
 
   useEffect(() => {

@@ -116,7 +116,7 @@ export default function UpdateRewardModal({
   const allowance = useAllowance(userAddress as `0x${string}`, tokenAddress);
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress
+    tokenAddress,
   );
 
   useEffect(() => {

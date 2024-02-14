@@ -33,6 +33,8 @@ const useRewardValueDisplay = (
     }
   }, [tokenValueRes.data]);
 
+  console.log(rewardValue);
+
   return rewardValue;
 };
 

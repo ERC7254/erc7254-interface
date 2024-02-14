@@ -22,9 +22,9 @@ import {
 import * as yup from "yup";
 
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
-import Autocomplete from "@/components/ControlledFormElements/Autocomplete";
 import Input from "@/components/ControlledFormElements/Input";
 import useAllowance from "@/hooks/web3/useAllowance";
+import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
 import useRewardValue from "@/hooks/web3/useRewardValue";
 import { isEthAddress } from "@/utils/isEthAddress";
 
@@ -38,7 +38,6 @@ interface UpdateRewardModalProps {
 }
 
 const defaultValues = {
-  tokenReward: "",
   amount: 0,
 };
 
@@ -47,16 +46,20 @@ export default function UpdateRewardModal({
   isOpen,
   onClose,
 }: UpdateRewardModalProps): React.ReactElement {
+  const tokenReward = useRewardTokenName(tokenAddress);
   const { isConnected, address: userAddress } = useAccount();
   const balanceRes = useBalance({
     address: userAddress,
+    token:
+      tokenReward.address === "0x4200000000000000000000000000000000000023"
+        ? undefined
+        : (tokenReward.address as `0x${string}`),
     // token: "0x4200000000000000000000000000000000000022"
   });
 
   const balance = balanceRes.data?.value;
 
   const validationSchema = yup.object({
-    tokenReward: yup.string().required("Token Reward is required"),
     amount: yup
       .number()
       .required("Amount is required")
@@ -85,12 +88,16 @@ export default function UpdateRewardModal({
       hash,
     });
 
+  const { isLoading: isApproveConfirming, isSuccess: isApproveConfirmed } =
+    useWaitForTransactionReceipt({
+      hash: approveHash,
+    });
+
   const {
-    // isLoading: isApproveConfirming,
-    isSuccess: isApproveConfirmed,
-  } = useWaitForTransactionReceipt({
-    hash: approveHash,
-  });
+    isOpen: isSuccessApproveOpen,
+    onOpen: onSuccessApproveOpen,
+    onClose: onSuccessApproveClose,
+  } = useDisclosure();
 
   const {
     isOpen: isSuccessModalOpen,
@@ -109,7 +116,7 @@ export default function UpdateRewardModal({
   const allowance = useAllowance(userAddress as `0x${string}`, tokenAddress);
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress,
+    tokenAddress
   );
 
   useEffect(() => {
@@ -126,61 +133,71 @@ export default function UpdateRewardModal({
 
   useEffect(() => {
     if (isApproveConfirmed) {
+      onSuccessApproveOpen();
+
       onSubmit({
-        tokenReward: getValues("tokenReward"),
         amount: getValues("amount"),
       });
     }
   }, [isApproveConfirmed]);
 
-  const onSubmit = async (data: {
-    tokenReward: `0x${string}` | string;
-    amount: number;
-  }): Promise<void> => {
-    const { tokenReward, amount } = data;
+  const handleApprove = (data: { amount: number }): void => {
+    const { amount } = data;
     const parseAmount = parseEther(amount.toString());
+    writeApproveContract({
+      chainId: 168587773,
+      address: tokenAddress,
+      abi: TokenRevenueAbi,
+      functionName: "approve",
+      args: [tokenAddress, parseAmount],
+    });
+  };
+
+  const onSubmit = async (data: { amount: number }): Promise<void> => {
+    const { amount } = data;
+    const parseAmount = parseEther(amount.toString());
+    const tokenRewardAddress = tokenReward.address;
 
     if (isConnected) {
-      if (isEthAddress(tokenReward as `0x${string}`)) {
+      if (isEthAddress(tokenRewardAddress as `0x${string}`)) {
         writeContract({
           chainId: 168587773,
           address: tokenAddress,
           abi: TokenRevenueAbi,
           functionName: "updateReward",
-          args: [[tokenReward], [parseAmount]],
+          args: [[tokenRewardAddress], [parseAmount]],
           value: parseAmount,
         });
       } else {
         if (allowance !== undefined && rewardValue !== undefined) {
           if (allowance <= rewardValue) {
             // console.log("need approve");
-            await writeApproveContract({
-              chainId: 168587773,
-              address: tokenAddress,
-              abi: TokenRevenueAbi,
-              functionName: "approve",
-              args: [tokenAddress, parseAmount],
-            });
-
+            // await writeApproveContract({
+            //   chainId: 168587773,
+            //   address: tokenAddress,
+            //   abi: TokenRevenueAbi,
+            //   functionName: "approve",
+            //   args: [tokenAddress, parseAmount],
+            // });
             // if (isApproveConfirmed) {
             //   console.log("approved, now update reward");
-
             //   await writeContract({
             //     chainId: 168587773,
             //     address: tokenAddress,
             //     abi: TokenRevenueAbi,
             //     functionName: "updateReward",
-            //     args: [[tokenReward], [parseAmount]],
+            //     args: [[tokenRewardAddress], [parseAmount]],
             //   });
             // }
           } else {
-            // console.log("approved before, now update reward");
+            console.log("approved before, now update reward");
+            console.log(tokenRewardAddress, parseAmount);
             writeContract({
               chainId: 168587773,
               address: tokenAddress,
               abi: TokenRevenueAbi,
               functionName: "updateReward",
-              args: [[tokenReward], [parseAmount]],
+              args: [[tokenRewardAddress], [parseAmount]],
             });
           }
         }
@@ -196,22 +213,34 @@ export default function UpdateRewardModal({
         <Divider />
         <FormProvider {...methods}>
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={6} mb={6}>
-            <Autocomplete
-              label="Token Reward"
-              isRequired
-              {...register("tokenReward")}
-            />
             <Input
               type="number"
-              label="Amount"
+              label={`Amount (${tokenReward.name})`}
               isRequired
               {...register("amount")}
             />
           </SimpleGrid>
         </FormProvider>
-        <Button type="submit" isLoading={isConfirming}>
-          UPDATE
-        </Button>
+
+        {allowance! <= rewardValue! ? (
+          <Button
+            onClick={handleSubmit(handleApprove)}
+            isLoading={isApproveConfirming}
+          >
+            APPROVE
+          </Button>
+        ) : (
+          <Button type="submit" isLoading={isConfirming}>
+            UPDATE
+          </Button>
+        )}
+
+        <SuccessModal
+          hash={approveHash}
+          isOpen={isSuccessApproveOpen}
+          onClose={onSuccessApproveClose}
+          isReload
+        />
 
         <SuccessModal
           hash={hash}

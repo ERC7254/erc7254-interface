@@ -10,7 +10,13 @@ import {
   useToken,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { useAccount, useWriteContract } from "wagmi";
+import { useEffect, useState } from "react";
+import {
+  BaseError,
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
 import SvgInsert from "@/components/SvgInsert";
@@ -20,10 +26,11 @@ import useRewardValueDisplay from "@/hooks/web3/useRewardValueDisplay";
 import useTokenName from "@/hooks/web3/useTokenName";
 import useTokenSymbol from "@/hooks/web3/useTokenSymbol";
 import { TokenRevenueClaimable } from "@/types/token-revenue";
-import { tokenRevertMapping } from "@/utils/tokenMapping";
 import { truncateAddress } from "@/utils/truncateAddress";
 
+import ErrorModal from "../ErrorModal";
 import MintModal from "../MintModal";
+import SuccessModal from "../SuccessModal";
 import UpdateRewardModal from "../UpdateRewardModal";
 import s from "./style.module.scss";
 
@@ -39,7 +46,13 @@ export default function TokenDetailHero({
   const [brandYellow200] = useToken("colors", ["brand.yellow.200"]);
   const account = useAccount();
   const { isConnected, address: userAddress } = account;
-  const { writeContract } = useWriteContract();
+  const { data: hash, error, writeContract } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [_, copy] = useCopyToClipboard();
 
   const tokenName = useTokenName(tokenAddress as `0x${string}`);
@@ -49,7 +62,7 @@ export default function TokenDetailHero({
   );
   const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
   const tokenSymbol = useTokenSymbol(tokenAddress as `0x${string}`);
-  const tokenRewardAddress = tokenRevertMapping(rewardToken);
+  const tokenRewardAddress = rewardToken.address;
   const {
     isOpen: isUpdateRewardModalOpen,
     onOpen: onUpdateRewardModalOpen,
@@ -77,6 +90,14 @@ export default function TokenDetailHero({
   const handleCopy = (text: string) => () => {
     copy(text);
   };
+
+  useEffect(() => {
+    setIsSuccessModalOpen(isConfirmed);
+  }, [isConfirmed]);
+
+  useEffect(() => {
+    setIsErrorModalOpen(Boolean(error));
+  }, [error]);
 
   return (
     <Stack
@@ -129,7 +150,7 @@ export default function TokenDetailHero({
         {isConnected ? (
           <>
             <Text color="brand.yellow.200" fontSize="4xl">
-              {`${rewardValue} ${rewardToken}`}
+              {`${rewardValue} ${rewardToken.name}`}
             </Text>
             <Flex gap={6}>
               <Button variant="ghost" onClick={onMintModalOpen}>
@@ -139,7 +160,10 @@ export default function TokenDetailHero({
                 UPDATE REWARD
               </Button>
               {Number(rewardValue) > 0 && (
-                <Button onClick={() => handleClaimReward()}>
+                <Button
+                  onClick={() => handleClaimReward()}
+                  isLoading={isConfirming}
+                >
                   CLAIM REWARD
                 </Button>
               )}
@@ -163,6 +187,17 @@ export default function TokenDetailHero({
           </Text>
         )}
       </Stack>
+      <SuccessModal
+        hash={hash}
+        isOpen={isSuccessModalOpen}
+        onClose={setIsSuccessModalOpen}
+        isReload
+      />
+      <ErrorModal
+        error={error as BaseError}
+        isOpen={isErrorModalOpen}
+        onClose={setIsErrorModalOpen}
+      />
     </Stack>
   );
 }

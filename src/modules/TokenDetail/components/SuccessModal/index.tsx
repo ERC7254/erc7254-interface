@@ -14,15 +14,24 @@ interface ISuccessModal {
   hash?: string;
   isOpen: boolean;
   onClose: Dispatch<SetStateAction<boolean>>;
+  isReload?: boolean;
 }
 
 export default function SuccessModal({
   hash,
   isOpen,
   onClose,
+  isReload,
 }: ISuccessModal): React.ReactElement {
   return (
-    <Modal isOpen={isOpen} onClose={() => onClose(false)} isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose(false);
+        isReload ? window.location.reload() : null;
+      }}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent>
         <Stack>

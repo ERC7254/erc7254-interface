@@ -1,8 +1,9 @@
 "use client";
 
-import { Box, Button, Flex, HStack, IconButton } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, IconButton, Text } from "@chakra-ui/react";
 import Container from "@Components/Container";
 import SvgInsert from "@Components/SvgInsert";
+import Image from "next/image";
 import { useAccount } from "wagmi";
 
 import { navList } from "@/constants/navList";
@@ -33,7 +34,14 @@ export default function Header(): React.ReactElement {
             as="a"
             href="/"
           >
-            <SvgInsert src="/branding/logo.svg" />
+            {/* <SvgInsert src="/branding/logo.svg" /> */}
+            {isMobile ? (
+              <Image src="/branding/logo-eth.png" alt="logo" fill />
+            ) : (
+              <Text color="brand.yellow.200" fontWeight="bold">
+                TOKEN REVENUE SHARING
+              </Text>
+            )}
           </Button>
           <Flex gap={2} alignItems="center">
             <IconButton

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useReadContract } from "wagmi";
-
 import { erc20Abi } from "viem";
+import { useReadContract } from "wagmi";
 
 const useAllowance = (
   userAddress: `0x${string}`,
-  tokenAddress: `0x${string}`
+  tokenAddress: `0x${string}`,
 ): bigint | undefined => {
   const [allowance, setAllowance] = useState<bigint>(0n);
 

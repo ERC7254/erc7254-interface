@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { useReadContract } from "wagmi";
 
-import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
+import { erc20Abi } from "viem";
 
 const useAllowance = (
   userAddress: `0x${string}`,
-  tokenAddress: `0x${string}`,
+  tokenAddress: `0x${string}`
 ): bigint | undefined => {
   const [allowance, setAllowance] = useState<bigint>(0n);
 
   const res = useReadContract({
     chainId: 168587773,
-    abi: TokenRevenueAbi,
-    address: tokenAddress as `0x${string}`,
+    abi: erc20Abi,
+    address: "0x4200000000000000000000000000000000000022",
     functionName: "allowance",
     args: [userAddress, tokenAddress],
   });

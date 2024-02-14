@@ -139,6 +139,7 @@ export default function HomeForm(): React.ReactElement {
             hash={hash}
             isOpen={isSuccessModalOpen}
             onClose={setIsSuccessModalOpen}
+            isReload
           />
           <ErrorModal
             error={error as BaseError}

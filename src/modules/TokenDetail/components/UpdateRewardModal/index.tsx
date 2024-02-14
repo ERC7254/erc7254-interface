@@ -11,7 +11,7 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { parseEther } from "viem";
+import { erc20Abi, parseEther } from "viem";
 import {
   BaseError,
   useAccount,
@@ -116,7 +116,7 @@ export default function UpdateRewardModal({
   const allowance = useAllowance(userAddress as `0x${string}`, tokenAddress);
   const rewardValue = useRewardValue(
     userAddress as `0x${string}`,
-    tokenAddress,
+    tokenAddress
   );
 
   useEffect(() => {
@@ -144,10 +144,12 @@ export default function UpdateRewardModal({
   const handleApprove = (data: { amount: number }): void => {
     const { amount } = data;
     const parseAmount = parseEther(amount.toString());
+
+    console.log(amount);
     writeApproveContract({
       chainId: 168587773,
-      address: tokenAddress,
-      abi: TokenRevenueAbi,
+      address: "0x4200000000000000000000000000000000000022",
+      abi: erc20Abi,
       functionName: "approve",
       args: [tokenAddress, parseAmount],
     });
@@ -190,8 +192,8 @@ export default function UpdateRewardModal({
             //   });
             // }
           } else {
-            console.log("approved before, now update reward");
-            console.log(tokenRewardAddress, parseAmount);
+            // console.log("approved before, now update reward");
+            // console.log(tokenRewardAddress, parseAmount);
             writeContract({
               chainId: 168587773,
               address: tokenAddress,
@@ -222,7 +224,7 @@ export default function UpdateRewardModal({
           </SimpleGrid>
         </FormProvider>
 
-        {allowance! <= rewardValue! ? (
+        {allowance! <= rewardValue! && tokenReward.name !== "ETH" ? (
           <Button
             onClick={handleSubmit(handleApprove)}
             isLoading={isApproveConfirming}
@@ -246,6 +248,7 @@ export default function UpdateRewardModal({
           hash={hash}
           isOpen={isSuccessModalOpen}
           onClose={onSuccessModalClose}
+          isReload
         />
         <ErrorModal
           error={error as BaseError}

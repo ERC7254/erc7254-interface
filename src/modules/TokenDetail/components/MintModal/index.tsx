@@ -124,6 +124,7 @@ export default function MintModal({
           hash={hash}
           isOpen={isSuccessModalOpen}
           onClose={onSuccessModalClose}
+          isReload
         />
         <ErrorModal
           error={error as BaseError}

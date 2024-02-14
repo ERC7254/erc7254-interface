@@ -5,7 +5,7 @@ import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
 
 const useRewardValueDisplay = (
   userAddress: `0x${string}`,
-  tokenAddress: `0x${string}`,
+  tokenAddress: `0x${string}`
 ): string | undefined => {
   const [rewardValue, setRewardValue] = useState("");
 
@@ -28,12 +28,10 @@ const useRewardValueDisplay = (
       setRewardValue(
         (Number((tokenValueRes.data as bigint[])[0]) / Number(10n ** 18n))
           .toFixed(18)
-          .replace(/\.?0+$/, ""),
+          .replace(/\.?0+$/, "")
       );
     }
   }, [tokenValueRes.data]);
-
-  console.log(rewardValue);
 
   return rewardValue;
 };

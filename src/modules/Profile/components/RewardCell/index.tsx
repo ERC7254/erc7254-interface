@@ -1,11 +1,10 @@
 import { Text } from "@chakra-ui/react";
 import { Row } from "@tanstack/react-table";
-import React, { useEffect, useState } from "react";
-import { useReadContract } from "wagmi";
+import React from "react";
 
-import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
+import useRewardTokenName from "@/hooks/web3/useRewardTokenName";
+import useRewardValueDisplay from "@/hooks/web3/useRewardValueDisplay";
 import { tTokenRevenue } from "@/types/token-revenue";
-import { tokenMapping } from "@/utils/tokenMapping";
 
 interface RewardCellProps {
   row: Row<tTokenRevenue>;
@@ -14,46 +13,18 @@ interface RewardCellProps {
 export default function RewardCell({
   row,
 }: RewardCellProps): React.ReactElement {
-  const tokenAddress = row.original.token.id as `0x${string}`;
-  const userAddress = row.original.owner;
-  const [rewardValue, setRewardValue] = useState("0");
+  const tokenAddress =
+    (row.original.token?.id as `0x${string}`) || row.original.tokenAddress?.id;
+  const userAddress = row.original.userAddress;
 
-  const tokenValueRes = useReadContract({
-    chainId: 168587773,
-    abi: TokenRevenueAbi,
-    address: tokenAddress,
-    functionName: "viewReward",
-    args: [userAddress],
-  });
+  const rewardValueDisplay = useRewardValueDisplay(
+    userAddress as `0x${string}`,
+    tokenAddress as `0x${string}`,
+  );
 
-  const tokenRewardRes = useReadContract({
-    chainId: 168587773,
-    abi: TokenRevenueAbi,
-    address: tokenAddress,
-    functionName: "tokenReward",
-  });
-
-  const rewardTokenName = tokenMapping(tokenRewardRes?.data as string);
-
-  useEffect(() => {
-    if (
-      tokenValueRes.data === undefined ||
-      tokenValueRes.data === null ||
-      !tokenValueRes.data
-    )
-      return;
-    else {
-      setRewardValue(
-        (
-          Number((tokenValueRes.data as bigint[])[0]) / Number(10n ** 18n)
-        ).toFixed(4),
-      );
-    }
-  }, [tokenValueRes.data]);
+  const rewardToken = useRewardTokenName(tokenAddress as `0x${string}`);
 
   return (
-    <Text fontSize="sm">
-      {rewardValue} {rewardTokenName}
-    </Text>
+    <Text fontSize="sm">{`${rewardValueDisplay} ${rewardToken.name}`}</Text>
   );
 }

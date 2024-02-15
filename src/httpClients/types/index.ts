@@ -8,6 +8,7 @@ export class PaginationParam<Filter> {
   filters?: Filter;
   locale?: string;
   userAddress?: string | `0x${string}`;
+  tokenAddress?: string | `0x${string}`;
 }
 
 export class PaginationOption {

@@ -22,10 +22,17 @@ export interface tTokenRevenue {
     name: string;
     symbol: string;
   };
+  tokenAddress?: {
+    decimals: string;
+    id: string;
+    name: string;
+    symbol: string;
+  };
   blockNumber: number;
   blockTimestamp: number;
   id: string;
-  owner: string;
+  userAddress: string;
   totalSupply: number;
   transactionHash: string;
+  value: number;
 }

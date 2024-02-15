@@ -121,6 +121,15 @@ export default function TokensTable(): React.ReactElement {
         header: "Total Supply",
         accessorKey: "totalSupply",
         size: 20,
+        cell: (
+          props: CellContext<tTokenRevenue, unknown>,
+        ): React.ReactElement => {
+          return (
+            <Text>
+              {Number(props.row.original.totalSupply) / Number(10n ** 18n)}
+            </Text>
+          );
+        },
       },
       {
         header: "Reward Token",

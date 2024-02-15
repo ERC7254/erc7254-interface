@@ -10,7 +10,14 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const title = params.id;
+  const tokenAddress = params.id;
+
+  const token = await fetch(
+    `https://api.erc7254.org/api/token-detail?chainId=168587773&tokenAddress=${tokenAddress}`
+  ).then((res) => res.json());
+
+  const title = token?.data.token.name;
+
   return {
     title: `${title} - Token Revenue Sharing`,
     description: "",

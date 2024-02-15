@@ -17,6 +17,7 @@ import tokensService from "@/httpClients";
 import { PaginationResponse } from "@/httpClients/types";
 import { Link } from "@/libs/router-events";
 import { tTokenRevenue } from "@/types/token-revenue";
+import { formatBigNumber } from "@/utils/formatBigNumber";
 
 import RewardCell from "../RewardCell";
 import s from "./style.module.scss";
@@ -84,10 +85,10 @@ export default function OwnedTokensTable(): React.ReactElement {
           props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
-          const token = original.token;
-          const name = token.name;
-          const symbol = token.symbol;
-          const address = token.id;
+          const token = original.tokenAddress;
+          const name = token?.name;
+          const symbol = token?.symbol;
+          const address = token?.id;
 
           return (
             <Link href={`/tokens/${address}`}>
@@ -118,6 +119,13 @@ export default function OwnedTokensTable(): React.ReactElement {
       {
         header: "Total Supply",
         accessorKey: "totalSupply",
+        cell: (
+          props: CellContext<tTokenRevenue, unknown>,
+        ): React.ReactElement => {
+          const original = props.row.original;
+          const totalSupply = original.totalSupply;
+          return <Text>{formatBigNumber(totalSupply)}</Text>;
+        },
         size: 30,
       },
       {
@@ -126,6 +134,18 @@ export default function OwnedTokensTable(): React.ReactElement {
         cell: (
           props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => <RewardCell row={props.row} />,
+        size: 30,
+      },
+      {
+        header: "Balance of",
+        accessorKey: "balance",
+        cell: (
+          props: CellContext<tTokenRevenue, unknown>,
+        ): React.ReactElement => {
+          const original = props.row.original;
+          const balance = original.value;
+          return <Text>{formatBigNumber(balance)}</Text>;
+        },
         size: 30,
       },
     ],

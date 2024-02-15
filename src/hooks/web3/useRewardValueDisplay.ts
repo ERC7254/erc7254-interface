@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useReadContract } from "wagmi";
 
 import { TokenRevenueAbi } from "@/abis/ITokenrevenue";
+import { formatBigNumber } from "@/utils/formatBigNumber";
 
 const useRewardValueDisplay = (
   userAddress: `0x${string}`,
@@ -25,11 +26,10 @@ const useRewardValueDisplay = (
     )
       return;
     else {
-      setRewardValue(
-        (Number((tokenValueRes.data as bigint[])[0]) / Number(10n ** 18n))
-          .toFixed(18)
-          .replace(/\.?0+$/, ""),
+      const formattedValue = formatBigNumber(
+        Number((tokenValueRes.data as bigint[])[0]),
       );
+      setRewardValue(formattedValue);
     }
   }, [tokenValueRes.data]);
 

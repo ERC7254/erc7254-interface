@@ -34,7 +34,7 @@ export default function TokenDetailPage({
       <Stack spacing={6} mb={8}>
         <TokenDetailBreadcrumb tokenName={tokenName} />
         <TokenDetailHero token={foundToken} tokenAddress={id} />
-        <TokenDetailHistory />
+        <TokenDetailHistory tokenAddress={id} />
       </Stack>
     </Container>
   );

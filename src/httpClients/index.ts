@@ -19,9 +19,18 @@ const getOwnedTokenList = async (
   });
 };
 
+const getTokenHistory = async (
+  params: PaginationParam<tTokenRevenue>,
+): Promise<PaginationResponse<tTokenRevenue>> => {
+  return await tokensClient.get(`/history-token-list`, {
+    params,
+  });
+};
+
 const tokensService = {
   getTokenList,
   getOwnedTokenList,
+  getTokenHistory,
 };
 
 export default tokensService;

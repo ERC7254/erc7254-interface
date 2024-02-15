@@ -13,7 +13,7 @@ export async function generateMetadata({
   const tokenAddress = params.id;
 
   const token = await fetch(
-    `https://api.erc7254.org/api/token-detail?chainId=168587773&tokenAddress=${tokenAddress}`
+    `https://api.erc7254.org/api/token-detail?chainId=168587773&tokenAddress=${tokenAddress}`,
   ).then((res) => res.json());
 
   const title = token?.data.token.name;

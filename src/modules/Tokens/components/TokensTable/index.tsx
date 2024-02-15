@@ -16,13 +16,13 @@ import tokensService from "@/httpClients";
 import { PaginationResponse } from "@/httpClients/types";
 import { Link } from "@/libs/router-events";
 import { tTokenRevenue } from "@/types/token-revenue";
+import { formatBigNumber } from "@/utils/formatBigNumber";
 
 import RewardTokenCell from "../RewardTokenCell";
 import s from "./style.module.scss";
-import { formatBigNumber } from "@/utils/formatBigNumber";
 
 const getTokenListFetcher = (
-  query: ReadonlyURLSearchParams
+  query: ReadonlyURLSearchParams,
 ): {
   key: (string | number)[];
   fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
@@ -68,7 +68,7 @@ export default function TokensTable(): React.ReactElement {
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // const formattedTokenList = useMemo<any[]>(() => {
@@ -84,7 +84,7 @@ export default function TokensTable(): React.ReactElement {
         header: "Name",
         accessorKey: "name",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
           const token = original.token;
@@ -123,7 +123,7 @@ export default function TokensTable(): React.ReactElement {
         accessorKey: "totalSupply",
         size: 20,
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
           const totalSupply = original.totalSupply;
@@ -135,14 +135,14 @@ export default function TokensTable(): React.ReactElement {
         accessorKey: "rewardToken",
         size: 20,
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => <RewardTokenCell row={props.row} />,
       },
       {
         header: "Create at",
         accessorKey: "timestamp",
         cell: (
-          props: CellContext<tTokenRevenue, unknown>
+          props: CellContext<tTokenRevenue, unknown>,
         ): React.ReactElement => {
           const timestamp = props.row.original.blockTimestamp;
           // const date = formatDate(timestamp);
@@ -151,7 +151,7 @@ export default function TokensTable(): React.ReactElement {
         size: 10,
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -171,13 +171,13 @@ export default function TokensTable(): React.ReactElement {
           totalPages={tokenList?.totalPages}
           onChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("page", p.toString())
+              pathname + "?" + createQueryString("page", p.toString()),
             );
           }}
           limit={Number(searchParams.get("limit")) || 10}
           onPageSizeChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("limit", p.toString())
+              pathname + "?" + createQueryString("limit", p.toString()),
             );
           }}
         />

@@ -34,7 +34,7 @@ export default function TokenDetailHistory({
   const searchParams = useSearchParams();
 
   const getTokenHistoryFetcher = (
-    query: ReadonlyURLSearchParams
+    query: ReadonlyURLSearchParams,
   ): {
     key: (string | number)[];
     fetcher: () => Promise<PaginationResponse<tTokenRevenue>>;
@@ -76,7 +76,7 @@ export default function TokenDetailHistory({
 
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   const columns = useMemo<ColumnDef<ITokenHistory>[]>(
@@ -85,7 +85,7 @@ export default function TokenDetailHistory({
         header: "Transaction Hash",
         accessorKey: "txhash",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const original = props.row.original;
           const txHash = original.transactionHash;
@@ -107,7 +107,7 @@ export default function TokenDetailHistory({
         header: "Amount",
         accessorKey: "amount",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const amount = props.row.original.value;
           return <Text fontSize="sm">{formatBigNumber(amount)}</Text>;
@@ -118,7 +118,7 @@ export default function TokenDetailHistory({
         header: "From",
         accessorKey: "from",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const from = props.row.original.from;
           return (
@@ -138,7 +138,7 @@ export default function TokenDetailHistory({
         header: "To",
         accessorKey: "to",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const to = props.row.original.to;
           return (
@@ -158,7 +158,7 @@ export default function TokenDetailHistory({
         header: "Create at",
         accessorKey: "timestamp",
         cell: (
-          props: CellContext<ITokenHistory, unknown>
+          props: CellContext<ITokenHistory, unknown>,
         ): React.ReactElement => {
           const timestamp = props.row.original.blockTime;
           return <Text fontSize="sm">{timestamp}</Text>;
@@ -166,7 +166,7 @@ export default function TokenDetailHistory({
         size: 20,
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -186,13 +186,13 @@ export default function TokenDetailHistory({
           totalPages={tokenHistory?.totalPages}
           onChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("page", p.toString())
+              pathname + "?" + createQueryString("page", p.toString()),
             );
           }}
           limit={Number(searchParams.get("limit")) || 10}
           onPageSizeChange={(p) => {
             router.push(
-              pathname + "?" + createQueryString("limit", p.toString())
+              pathname + "?" + createQueryString("limit", p.toString()),
             );
           }}
         />

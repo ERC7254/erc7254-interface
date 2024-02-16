@@ -40,7 +40,7 @@ const defaultValues = {
   totalSupply: 0,
 };
 
-const MINIMUM_SUPPLY = 100;
+const MINIMUM_SUPPLY = 0;
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),

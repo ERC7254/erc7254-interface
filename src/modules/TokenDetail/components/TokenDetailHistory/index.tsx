@@ -93,7 +93,7 @@ export default function TokenDetailHistory({
           return (
             <Link
               target="_blank"
-              href={`https://testnet.blastscan.io/address/${txHash}`}
+              href={`https://testnet.blastscan.io/tx/${txHash}`}
             >
               <Text fontSize="sm" fontWeight="bold">
                 {truncateAddress(txHash)}

@@ -1,5 +1,5 @@
 export const formatBigNumber = (value: number, toFixed: number = 9): string => {
-  let parts = (Number(value) / Number(10n ** 18n))
+  const parts = (Number(value) / Number(10n ** 18n))
     .toFixed(toFixed)
     .replace(/\.?0+$/, "");
 

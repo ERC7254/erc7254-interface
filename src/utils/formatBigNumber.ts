@@ -5,7 +5,7 @@ export const formatBigNumber = (value: number, toFixed: number = 9): string => {
 
   const [integerPart, decimalPart] = parts.split(".");
 
-  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const formattedValue = decimalPart
     ? `${formattedInteger}.${decimalPart}`
     : formattedInteger;
